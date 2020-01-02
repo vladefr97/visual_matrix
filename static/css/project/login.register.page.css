@@ -1,0 +1,32 @@
+.login-page, .register-page {
+  background: #242f3d;
+}
+
+.login-box-body, .register-box-body {
+  border: 1px solid #1976d2;
+  background: #17212b;
+  box-shadow: 6px 5px 11px -3px #17212b;
+}
+
+.login-logo, .register-logo {
+  color: #1976d2;
+  text-shadow: #17212b 3px 3px;
+}
+
+.login-box-body input, .register-box-body input {
+  color: #d8dadc;
+  background: #242f3d;
+  border: 1px solid #1976d2;
+}
+
+.login-box-body button, .register-box-body button {
+  color: #d8dadc;
+  background: #1976d2;
+  border: 1px solid #1976d2;
+}
+
+.login-box-body input:focus, .register-box-body input:focus {
+  border: 2px solid #1976d2;
+}
+
+/*# sourceMappingURL=login.register.page.css.map */

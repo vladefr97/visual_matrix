@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Главная</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="/static/components/bootstrap/dist/css/bootstrap.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/static/components/font-awesome/css/font-awesome.min.css">
+    <!--AdminLTE styles-->
+    <link rel="stylesheet" href="/static/components/adminlte/css/AdminLTE.css">
+    {#    Visual Matrix skin for AdminLTE#}
+    <link rel="stylesheet" href="/static/components/adminlte/css/vm-skins.css">
+    <!--Google fonts-->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link rel="stylesheet" href="../static/css/main.css">
+    {#    Charts styles#}
+
+    <link rel="stylesheet" href="../static/css/charts.css">
+
+    {#    Modal winoow styles#}
+    <link rel="stylesheet" href="../static/css/base/modal.css">
+
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+
+    {% include 'main-header.html' %}
+    {% include 'main-sidebar.html' %}
+    <div class="content-wrapper">
+        <section class="content-header">
+
+        </section>
+        <section class="content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="box  mt-4">
+                            <div id="co2-chart"></div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="box  mt-4">
+                            <div id="rh-chart"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </section>
+    </div>
+
+</div>
+{% include 'modal-upload-data.html' %}
+<!--    Bundle-->
+<script src="../static/js/dist/bundle.js"></script>
+
+{#ApexCharts#}
+<script src="../static/js/dist/charts.js"></script>
+</body>
+</html>

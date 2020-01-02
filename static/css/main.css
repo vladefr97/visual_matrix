@@ -1,0 +1,21 @@
+@import "/static/components/adminlte/css/nav-item.css";
+/*Стили кнопок специфичные для данного проекта*/
+
+/*Добавил чтобы не сливались главная страница, вход в учетную запись. регистрация*/
+.nav-pills li {
+    margin-right: 10px;
+}
+
+
+/* 1 квадратик карусели */
+.carousel-element {
+    /*padding: 30px;*/
+    /*text-align: center;*/
+    /*font-size: 300%;*/
+    /*border-right: 1px solid #777;*/
+}
+
+.deactivated {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+}

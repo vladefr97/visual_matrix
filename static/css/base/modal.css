@@ -1,0 +1,34 @@
+@charset "UTF-8";
+#modal-form_upload {
+  border-radius: 5px;
+  border: 3px #000 solid;
+  background: #fff;
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  width: 800px;
+  margin-top: -150px;
+  margin-left: -400px;
+  display: none;
+  opacity: 0;
+  z-index: 5;
+  padding: 20px 10px;
+}
+
+/* Пoдлoжкa */
+#overlay_upload {
+  z-index: 3;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0.8;
+  -moz-opacity: 0.8;
+  filter: alpha(opacity=80);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  display: none;
+}
+
+/*# sourceMappingURL=modal.css.map */

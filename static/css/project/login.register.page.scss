@@ -1,0 +1,32 @@
+@import "../base.variables";
+
+.login-page, .register-page {
+  background: $base_grey
+}
+
+.login-box-body, .register-box-body {
+  border: 1px solid $base_blue;
+  background: $base_black;
+  box-shadow: 6px 5px 11px -3px $base_black;
+}
+
+.login-logo, .register-logo {
+  color: $base_blue;
+  text-shadow: $base_black 3px 3px;
+}
+
+.login-box-body input, .register-box-body input {
+  color: $base_font_color;
+  background: $base_grey;
+  border: 1px solid $base_blue;
+}
+ .login-box-body button, .register-box-body button {
+    color: $base_font_color;
+  background: $base_blue;
+  border: 1px solid $base_blue;
+
+ }
+
+.login-box-body input:focus, .register-box-body input:focus {
+  border: 2px solid $base_blue;
+}

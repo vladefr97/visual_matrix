@@ -1,0 +1,34 @@
+header.main-header {
+    background-color: #1976d2;
+}
+
+aside.main-sidebar {
+
+    background-color: #242a33;
+    color: whitesmoke;
+}
+
+a {
+    color: whitesmoke;
+}
+
+a.logo {
+    box-sizing: border-box;
+}
+
+aside.main-sidebar {
+    box-shadow: 2px 0px 7px 0px rgba(0, 0, 0, 0.75)
+}
+
+.content-wrapper {
+    background-color: #323743;
+}
+
+li.nav-item:hover {
+    background-color: #1976d2;
+}
+
+li.nav-item > a:hover {
+    color: white;
+    text-decoration: none;
+}

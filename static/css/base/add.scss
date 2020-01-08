@@ -1,0 +1,15 @@
+@import "../base.variables";
+.add-icon{
+  width: 64px;
+  height: 64px;
+  background-image: url("../../img/icons/add-icon.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: rgba(23, 33, 43, 0.6);;
+  border: 2px solid  $base_blue;
+  border-radius: 64px;
+  float: right;
+  box-shadow: 6px 5px 11px -3px $base_black;
+  cursor: pointer;
+
+}

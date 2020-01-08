@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,9 +22,12 @@
 
     <link rel="stylesheet" href="../static/css/charts.css">
 
-    {#    Modal winoow styles#}
-    <link rel="stylesheet" href="../static/css/base/modal.css">
-
+    {#    Homepage window styles#}
+    <link rel="stylesheet" href="../static/css/project/homepage.css">
+    <!-- jQuery 3 -->
+    <script src="/static/components/jquery/dist/jquery.min.js"></script>
+    <!--AdminLTE project-->
+    <script src="../static/components/adminlte/js/adminlte.js"></script>
 
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -42,24 +45,50 @@
             <div class="container-fluid">
 
                 <div class="row">
-                    <div class="col-md-10">
-                        <div class="box  mt-4">
-                            <div id="co2-chart"></div>
-                        </div>
-                    </div>
+                    <div class="col-sm-2">
+                        <div class="vectors-container">
+                            <div class="vector">
+                                <p class="vector-text">dd</p>
+                            </div>
+                            <div class="vector">
+                                <p class="vector-text">dd</p>
+                            </div>
+                            <div class="vector">
+                                <p class="vector-text">dd</p>
+                            </div>
 
-                </div>
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="box  mt-4">
-                            <div id="rh-chart"></div>
                         </div>
-                    </div>
 
+
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="box  mt-4">
+                                    <div id="co2-chart"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="box  mt-4">
+                                    <div id="rh-chart"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <a href="/get-eigenvalues">Values</a>
+                    </div>
                 </div>
+
 
             </div>
 
+            <div class="add-icon">
+
+            </div>
 
         </section>
     </div>

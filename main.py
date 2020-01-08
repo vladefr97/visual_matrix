@@ -1,6 +1,8 @@
 import json
 
+from source.bin.vmf.parsers import VMFParser
+
 if __name__ == '__main__':
-    with open('./resources/test.json') as json_file:
-        data = json.load(json_file)
-    print(data)
+   parser = VMFParser()
+   parser.parse('dd')
+   print('dd')

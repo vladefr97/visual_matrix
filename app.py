@@ -4,12 +4,17 @@ import json
 from flask import Flask, render_template, request, session, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from source.bin.vmf.parsers import VMFParser
 from source.conf import database, application
 from source.database.db_handler import MySQLHandler
 
 app = Flask(__name__)
 app.secret_key = application['secret-key']
-
+# Instance for vmf files parsing
+parser = VMFParser()
+# List of VMF files
+vmf_list = []
+# Object for communication with MYSQL Database
 db_handler = MySQLHandler(app=app, db_host=database['host'], db_name=database['name'], db_user=database['user'],
                           db_password=database['password'])
 
@@ -83,6 +88,15 @@ def save_vector():
     print(filename)
     session['filename'] = filename
     session['filedata'] = data
+    # parser = VMFParser()
+    parser.parse_vmf_text(data)
+    print('done')
+
+
+@app.route('/get-eigenvalues', methods=['GET'])
+def get_eigenvalues():
+    values = parser.get_eigenvalues()
+    print(str(values))
 
 
 @app.route('/read-file')

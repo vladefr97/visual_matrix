@@ -1,0 +1,15 @@
+.add-icon {
+  width: 64px;
+  height: 64px;
+  background-image: url("../../img/icons/add-icon.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: rgba(23, 33, 43, 0.6);
+  border: 2px solid #1976d2;
+  border-radius: 64px;
+  float: right;
+  box-shadow: 6px 5px 11px -3px #17212b;
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=add.css.map */

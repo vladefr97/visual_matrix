@@ -28,7 +28,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     mode: 'development',
     entry: {
-        bundle: './static/js/src/project/pages/index.js',
+        bundle: './static/js/src/project/pages/homepage.js',
         charts: './static/js/src/project/charts.js'
 
     },

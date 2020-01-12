@@ -1,0 +1,64 @@
+#vectors-container {
+  overflow-y: auto;
+  overflow-x: auto;
+  height: 100vh;
+}
+
+.vector {
+  width: 100%;
+  background: #1976d2;
+  margin: 5px 0;
+  color: #d8dadc;
+  box-shadow: 6px 5px 11px -3px #17212b;
+  border-radius: 2px;
+  height: auto;
+  position: relative;
+}
+
+.vector .vector-text {
+  padding: 40px 5px;
+  display: inline-block;
+  word-break: break-all;
+}
+
+.vector .vector-icons {
+  float: right;
+  display: inline-block;
+  height: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.vector .vector-icons .vector-icon {
+  display: inline-block;
+  margin: 5px;
+  cursor: pointer;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.vector .vector-icons .vector-icon {
+  display: inline-block;
+  float: right;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.vector .vector-icons .vector-icon:hover {
+  color: white;
+}
+
+.vector .vector-icons .vector-text {
+  width: 160px;
+}
+
+.vector .vector-icons .vector-icon.delete-icon:hover {
+  color: red;
+}
+
+.vector .vector-icons .vector-text {
+  width: 160px;
+}
+
+/*# sourceMappingURL=vector.css.map */

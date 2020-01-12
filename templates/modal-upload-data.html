@@ -10,10 +10,19 @@
                 <p></p>
             </div>
             <div class="modal-footer">
-                <button type="button" id="cancel-btn_upload" class="btn btn-primary pull-left" data-dismiss="modal">
+                <button type="button" id="cancel-btn_upload" class="btn btn-secondary pull-left" data-dismiss="modal">
                     Отмена
                 </button>
-                <input type="file" id="submit-btn_upload" class="btn btn-danger">
+                {#                <input type="file" id="submit-btn_upload" class="">#}
+                <div class="input-wrapper">
+                    <div class="form-group">
+                        <input type="file" name="file" id="file" class="input-file">
+                        <label for="file" class="btn btn-tertiary js-labelFile">
+                            <i class="icon fa fa-check"></i>
+                            <span class="js-fileName">Загрузить файл</span>
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
 

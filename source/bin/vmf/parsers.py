@@ -10,7 +10,7 @@ class VMFParser:
     eigenvalues = []
     eigenvectors = []
     coordinates: pd.DataFrame
-    transformed_matrix = [[]]
+    transformed_matrix = []
     eigendict = {}
 
     def __init__(self) -> None:
@@ -22,10 +22,14 @@ class VMFParser:
     def get_eigenvalues(self):
         return self.eigenvalues
 
-    def parse_vmf_text(self, text: str):
+    def parse_vmf_text(self, text: str, filename: str):
         """
         :rtype: VMFObject
         """
+        self.eigenvalues = []
+        self.eigenvectors = []
+        self.transformed_matrix = []
+        self.eigendict = {}
         try:
             vmf_data = text.split('\n')
             vmf_params = vmf_data[0].split()
@@ -42,7 +46,8 @@ class VMFParser:
                     np.asfarray(np.array(vmf_data[coord_num + self.eigenN + 1 + i].split()), float))
                 self.eigendict[self.eigenvalues[i]] = self.eigenvectors[i]
             self.generate_transformed_matrix()
-            return VMFObject()
+            return VMFObject(filename=filename, eigenvalues=self.eigenvalues, coordinates=self.coordinates,
+                             eigendict=self.eigendict, transformed_matrix=self.transformed_matrix)
         except Exception as e:
             print('Возникла ошибка: ' + str(e))
 

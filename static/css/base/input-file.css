@@ -1,0 +1,47 @@
+@charset "UTF-8";
+.input-wrapper {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.input-wrapper .btn-tertiary {
+  color: #d8dadc;
+  padding: 0;
+  line-height: 35px;
+  width: 150px;
+  display: block;
+  background-color: #1976d2;
+}
+
+.input-wrapper .btn-tertiary:hover, .input-wrapper .btn-tertiary:focus {
+  color: #888;
+  border-color: #888;
+}
+
+.input-wrapper .input-file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.input-wrapper .input-file + .js-labelFile {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.input-wrapper .input-file + .js-labelFile .icon:before {
+  content: "";
+}
+
+.input-wrapper .input-file + .js-labelFile.has-file .icon:before {
+  content: "";
+  color: #5AAC7B;
+}
+
+/*# sourceMappingURL=input-file.css.map */

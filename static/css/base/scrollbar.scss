@@ -1,0 +1,25 @@
+@import "../base.variables";
+::-webkit-scrollbar-track {
+  background-color: $base_grey
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+  background-color: $base_blue;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: $base_blue;
+}
+
+::-webkit-resizer {
+  background-image: url('');
+  background-repeat: no-repeat;
+  width: 4px;
+  height: 0px
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}

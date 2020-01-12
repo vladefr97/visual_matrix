@@ -487,7 +487,8 @@ h6,
     top: 0;
     left: 0;
     padding-top: 50px;
-    min-height: 100%;
+    /*Поменял параметр, раньше было 100%*/
+    min-height: 95%;
     width: 230px;
     z-index: 810;
     -webkit-transition: -webkit-transform 0.3s ease-in-out, width 0.3s ease-in-out;

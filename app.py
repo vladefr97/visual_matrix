@@ -1,5 +1,4 @@
 import json
-# from tkinter import filedialog as fd
 
 from flask import Flask, render_template, request, session, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,10 +7,12 @@ from source.bin.vmf.parsers import VMFParser
 from source.conf import database, application
 from source.database.db_handler import MySQLHandler
 
+# from tkinter import filedialog as fd
+
 app = Flask(__name__)
 app.secret_key = application['secret-key']
-# Instance for vmf files parsing
-parser = VMFParser()
+# # Instance for vmf files parsing
+# parser = VMFParser()
 # List of VMF files
 vmf_list = []
 # Object for communication with MYSQL Database
@@ -85,18 +86,49 @@ def logout():
 def save_vector():
     filename = request.values["filename"]
     data = request.values["filedata"]
-    print(filename)
-    session['filename'] = filename
-    session['filedata'] = data
-    # parser = VMFParser()
-    parser.parse_vmf_text(data)
-    print('done')
+    parser = VMFParser()
+
+    vmf_object = parser.parse_vmf_text(data, filename)
+    vmf_list.append(vmf_object)
+    print(len(vmf_list))
+    response = {'vmf_object': {
+        'filename': vmf_object.filename,
+        'vmf_id': len(vmf_list) - 1,
+        'eigenvalues': vmf_object.eigenvalues
+
+    }}
+    return response
 
 
-@app.route('/get-eigenvalues', methods=['GET'])
-def get_eigenvalues():
-    values = parser.get_eigenvalues()
-    print(str(values))
+@app.route('/vector-view')
+def vector_view():
+    return render_template('vector-view.html')
+
+
+@app.route('/get-2d-dependence')
+def get_2d_dependence():
+    vmf_id = int(request.values["vmf_id"])
+    vector_id = int(request.values['vector_id'])
+    eigenvalue = float(request.values["eigenvalue"])
+    vmf_obj = vmf_list[vmf_id]
+    arguments = vmf_obj.coordinates[0].tolist()
+    func_values = vmf_obj.transformed_matrix[vector_id]['ux']
+    points = create_points(arguments=arguments, func_values=func_values)
+    response = {'points': points}
+    return response
+
+
+def create_points(arguments, func_values):
+    points = []
+    for x, y in zip(arguments, func_values):
+        points.append([x, y])
+    return points
+
+
+# @app.route('/get-eigenvalues', methods=['GET'])
+# def get_eigenvalues():
+#     values = parser.get_eigenvalues()
+#     print(str(values))
 
 
 @app.route('/read-file')

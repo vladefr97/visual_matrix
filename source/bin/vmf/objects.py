@@ -1,10 +1,13 @@
+import pandas as pd
+
+
 class VMFObject:
     # Имя файла с данными
     filename: str
     # Список собственных чисел
     eigenvalues: list
     # Список координат узлов. В каждой ячейке списка хранится массив из трех элементов (x,y,z)
-    coordinates: list
+    coordinates: pd.DataFrame
     # Словарь вида {'eigenvalue':'eigenvector'}
     eigendict: dict
     # Массив в каждой ячейке которого хранится словарь вида {'x':[vector],'y':[vector],'z':[vector],'phi':[vector]}

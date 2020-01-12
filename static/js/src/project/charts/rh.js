@@ -4,10 +4,11 @@ window.Apex = {
         toolbar: {
             show: false
         },
+
     },
     // colors: ['#FCCF31', '#17ead9', '#f02fc2'],
     stroke: {
-        width: 3
+        width: 1
     },
     dataLabels: {
         enabled: false

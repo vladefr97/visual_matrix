@@ -29,7 +29,8 @@ module.exports = {
     mode: 'development',
     entry: {
         bundle: './static/js/src/project/pages/homepage.js',
-        charts: './static/js/src/project/charts.js'
+        charts: './static/js/src/project/charts.js',
+        vectorView: './static/js/src/project/pages/vector-view-page.js'
 
     },
 

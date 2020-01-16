@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>{{'Ошибка'}}</title>
+    <title>{{ 'Ошибка' }}</title>
 
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -14,27 +14,28 @@
     <link rel="stylesheet" href="../static/components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="../static/components/bootstrap/dist/css/bootstrap-theme.css">
     <script src="../static/components/bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../static/css/project/error-page.css">
 
 </head>
 
-<body>
+<body class="error-page">
 
 <div class="container">
     <div class="header">
         <nav>
             <ul class="nav nav-pills pull-right">
 
-                <li role="presentation"><a href="/">{{'Вход в учетную запись'}}</a>
+                <li  class="error-btn"><a href="/">{{ 'Вход в учетную запись' }}</a>
                 </li>
-                <li role="presentation"><a href="/register">{{'Регистрация'}}</a>
+                <li><a href="/register">{{ 'Регистрация' }}</a>
                 </li>
             </ul>
         </nav>
-        <h3 class="text-muted">{{'VISUAL MATRIX'}}</h3>
+        <h3 class="text-muted">{{ 'VISUAL MATRIX' }}</h3>
     </div>
 
-    <div class="jumbotron">
-        <h1>{{error}}</h1>
+    <div class="jumbotron error-field">
+        <h1>{{ error }}</h1>
     </div>
 
 

@@ -1,9 +1,11 @@
 @import "../base.variables";
-#vectors-container{
-  overflow-y:auto;
-  overflow-x:auto;
-  height: 100vh;
+
+#vectors-container {
+  overflow-y: auto;
+  overflow-x: auto;
+  height: 80vh;
 }
+
 .vector {
   width: 100%;
   background: $base_blue;
@@ -18,47 +20,61 @@
   //overflow: auto;
 }
 
+.vector-icon {
+  display: inline-block;
+  //float: right;
+  margin: 5px;
+  cursor: pointer;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.6)
+}
+
+
+.vector-icon:hover {
+  color: rgba(255, 255, 255, 1)
+}
+
+
 .vector .vector-text {
   padding: 40px 5px;
   display: inline-block;
   word-break: break-all;
 
 }
-.vector .vector-icons{
+
+.vector .vector-icons {
   //width: 50%;
-  float:right;
+  float: right;
   display: inline-block;
   height: auto;
   position: absolute;
-  top:0;
+  top: 0;
   right: 0;
 
 }
-.vector .vector-icons  .vector-icon {
-  display: inline-block;
-  //float: right;
-  margin: 5px;
-  cursor: pointer;
-  font-size: 24px;
-  color:rgba(255,255,255,0.6)
-}
+
 
 .vector .vector-icons .vector-icon {
-  display: inline-block;
   float: right;
-  margin: 5px;
-  cursor: pointer;
-}
-.vector .vector-icons .vector-icon:hover{
-   color:rgba(255,255,255,1)
-}
-.vector .vector-icons .vector-text{
-  width:160px;
 }
 
-.vector .vector-icons .vector-icon.delete-icon:hover{
-   color:red;
+//.vector .vector-icons .vector-icon {
+//  display: inline-block;
+//  float: right;
+//  margin: 5px;
+//  cursor: pointer;
+//}
+
+.vector .vector-icons .vector-text {
+  width: 160px;
 }
-.vector .vector-icons .vector-text{
-  width:160px;
+
+.vector .vector-icons .vector-icon.delete-icon:hover {
+  color: red;
 }
+
+.vector .vector-icons .vector-text {
+  width: 160px;
+}
+
+

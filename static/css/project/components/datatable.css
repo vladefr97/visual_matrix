@@ -1,0 +1,11 @@
+.vm-table {
+  background-color: #17212b;
+  border: 1px solid #242f3d;
+  color: #d8dadc;
+}
+
+.vm-table td {
+  border: 1px solid #242f3d;
+}
+
+/*# sourceMappingURL=datatable.css.map */

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Blank</title>
+    <title>Просмотр значений</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -27,11 +27,10 @@
     <!--AdminLTE project-->
     <script src="../static/components/adminlte/js/adminlte.js"></script>
 
-    {#    Homepage window styles#}
-    <link rel="stylesheet" href="../static/css/project/homepage.css">
+    <script src="static/js/dist/vectorView.js"></script>
 
 </head>
-<body class="hold-transition skin-blue sidebar-mini" id="carousel">
+<body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
 
@@ -46,37 +45,58 @@
             <div class="container-fluid">
 
                 <div class="row">
-                    <table class="table ">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <h1>{{ vector_info }}</h1>
+                    <div id="table-wrapper">
+                        <table class="table vm-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">X</th>
+                                <th scope="col">Y</th>
+                                <th scope="col">Z</th>
+                                <th scope="col">UX</th>
+                                <th scope="col">UY</th>
+                                <th scope="col">UZ</th>
+                                <th scope="col">Phi</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in table_values %}
+                                <tr>
+                                    <td>{{ row['index'] }}</td>
+                                    <td>{{ row['x'] }}</td>
+
+                                    <td>{{ row['y'] }}</td>
+
+                                    <td>{{ row['z'] }}</td>
+
+                                    <td>{{ row['ux'] }}</td>
+
+                                    <td>{{ row['uy'] }}</td>
+
+                                    <td>{{ row['uz'] }}</td>
+                                    <td>{{ row['phi'] }}</td>
+
+                                </tr>
+                            {% endfor %}
+                            {#                        <tr>#}
+                            {#                            <th scope="row">2</th>#}
+                            {#                            <td>Jacob</td>#}
+                            {#                            <td>Thornton</td>#}
+                            {#                            <td>@fat</td>#}
+                            {#                        </tr>#}
+                            {#                        <tr>#}
+                            {#                            <th scope="row">3</th>#}
+                            {#                            <td>Larry</td>#}
+                            {#                            <td>the Bird</td>#}
+                            {#                            <td>@twitter</td>#}
+                            {#                        </tr>#}
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
+
 
             </div>
 
@@ -86,7 +106,7 @@
 
 </div>
 
-<!--    Bundle-->
-<script src="../static/js/dist/bundle.js"></script>
+{#<!--    Bundle-->#}
+{#<script src="../static/js/dist/bundle.js"></script>#}
 </body>
 </html>

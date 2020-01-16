@@ -40,6 +40,7 @@ class VMFParser:
             for i in range(0, coord_num):
                 coords.append(np.asfarray(np.array(vmf_data[i + 1].split()), float))
             self.coordinates = pd.DataFrame(data=coords)
+            self.coordinates.columns = ['x', 'y', 'z']
             for i in range(0, self.eigenN):
                 self.eigenvalues.append(float(vmf_data[coord_num + 1 + i]))
                 self.eigenvectors.append(

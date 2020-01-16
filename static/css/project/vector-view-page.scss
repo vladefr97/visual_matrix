@@ -1,0 +1,13 @@
+@import "components/datatable";
+@import "../base/scrollbar.css";
+@import "../base.variables";
+#table-wrapper{
+  max-height: 90vh;
+  overflow-y: auto;
+
+}
+
+h1{
+  margin: 5px;
+  color:$base_font_color;
+}

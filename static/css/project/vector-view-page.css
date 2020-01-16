@@ -1,3 +1,39 @@
+@import "../base/scrollbar.css";
+.vm-table {
+  background-color: #17212b;
+  border: 1px solid #242f3d;
+  color: #d8dadc;
+  text-align: center;
+}
 
+.vm-table thead {
+  font-weight: bold;
+  font-size: 18px;
+  color: #1976d2;
+}
+
+.vm-table tbody {
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+.vm-table td {
+  border: 1px solid #242f3d;
+}
+
+.vm-table thead th {
+  text-align: center;
+  border: 1px solid #242f3d;
+}
+
+#table-wrapper {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+h1 {
+  margin: 5px;
+  color: #d8dadc;
+}
 
 /*# sourceMappingURL=vector-view-page.css.map */

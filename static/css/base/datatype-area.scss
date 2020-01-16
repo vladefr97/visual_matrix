@@ -1,0 +1,12 @@
+@import "../base.variables";
+
+.datatype-area {
+  width: 100%;
+  background: $base_blue;
+  color: $base_font_color;
+  box-shadow: 6px 5px 11px -3px $base_black;
+  border-radius: 2px;
+  height: auto;
+  position: relative;
+  margin-bottom: 20px;
+}

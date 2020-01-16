@@ -1,0 +1,15 @@
+@import "../base.variables";
+
+.error-page {
+  background-color: $base_grey;
+}
+
+.error-field {
+  //border: 1px solid $base_blue;
+  background: $base_black;
+  box-shadow: 6px 5px 11px -3px $base_black;
+  color:$base_font_color;
+}
+.error-btn{
+
+}

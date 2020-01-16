@@ -2,13 +2,68 @@ import '../command.buttons'
 import {vmChart} from "../charts/vm-chart";
 import {rhChart} from "../charts/rh";
 
-let vmDarkChart = new vmChart();
-let rhDarkChart = new rhChart();
+// let vmDarkChart = new vmChart("UX(X)");
+// let rhDarkChart = new rhChart();
 
+var charts = {
+    'ux-x': {
+        'initialized': false,
+        'chart': new vmChart("UX(X)", '#ux-x')
+    },
+    'uy-x': {
+        'initialized': false,
+        'chart': new vmChart("UY(X)", '#uy-x')
+    },
+    'uz-x': {
+        'initialized': false,
+        'chart': new vmChart("UZ(X)", '#uz-x')
+    },
+    'phi-x': {
+        'initialized': false,
+        'chart': new vmChart("Phi(X)", '#phi-x')
+    },
+    'ux-y': {
+        'initialized': false,
+        'chart': new vmChart("UX(y)", '#ux-y')
+    },
+    'uy-y': {
+        'initialized': false,
+        'chart': new vmChart("UY(Y)", '#uy-y')
+    },
+    'uz-y': {
+        'initialized': false,
+        'chart': new vmChart("UZ(Y)", '#uz-y')
+    },
+    'phi-y': {
+        'initialized': false,
+        'chart': new vmChart("Phi(Y)", '#phi-y')
+    },
+    'ux-z': {
+        'initialized': false,
+        'chart': new vmChart("UX(Z)", '#ux-z')
+    },
+    'uy-z': {
+        'initialized': false,
+        'chart': new vmChart("UY(Z)", '#uy-z')
+    },
+    'uz-z': {
+        'initialized': false,
+        'chart': new vmChart("UZ(Z)", '#uz-z')
+    },
+    'phi-z': {
+        'initialized': false,
+        'chart': new vmChart("Phi(Z)", '#phi-z')
+    },
 
+};
 $(document).ready(function () {
-    vmDarkChart.init();
-    rhDarkChart.init();
+    //
+    // vmDarkChart.init();
+
+    toggleVMChartVisible('#ux-x');
+    charts['ux-x']['initialized'] = true;
+    charts['ux-x']['chart'].init();
+
 
     $('#btn-upload').on('click', function () {
         displayUploadFileModal();
@@ -54,8 +109,19 @@ $(document).ready(function () {
 
 
     })
-});
 
+    // let radiobtns = document.querySelector('.datatype-area p');
+    let radiobtns = Array.from($('.type-option'));
+    $.each(radiobtns, function (index, value) {
+        $(value).on('click', function () {
+            let datatypeArea = $('.datatype-area');
+            let dependencyType = $($(this).children()[0]).attr('value');
+            $(datatypeArea).attr('data-dependency-type', dependencyType);
+        })
+
+    })
+
+});
 
 function createVMFVectors(filename, eigenvalues, vmfId) {
 
@@ -67,7 +133,7 @@ function createVMFVectors(filename, eigenvalues, vmfId) {
         vectorDivs[i] = document.createElement('div');
         $(vectorDivs[i]).addClass('vector');
         let p = document.createElement('p');
-        let divText = document.createElement('div')
+        let divText = document.createElement('div');
         $(divText).addClass('vector-text');
         let index = i + 1;
         divText.innerHTML = 'Vector - ' + index + ' (' + filename + '), Value = ' + eigenvalues[i];
@@ -76,6 +142,9 @@ function createVMFVectors(filename, eigenvalues, vmfId) {
 
         let iconsDiv = document.createElement('div');
         $(iconsDiv).addClass('vector-icons');
+        $(iconsDiv).attr('data-eigenvalue', eigenvalues[i]);
+        $(iconsDiv).attr('data-vmf-id', vmfId);
+        $(iconsDiv).attr('data-vector-id', i);
 
         //Иконка для удаления вектора
         let div = document.createElement('div');
@@ -83,7 +152,6 @@ function createVMFVectors(filename, eigenvalues, vmfId) {
         $(div).addClass('delete-icon');
         let icon = document.createElement('i');
         $(icon).addClass('fa fa-times');
-
         div.append(icon);
         iconsDiv.append(div);
 
@@ -108,6 +176,7 @@ function createVMFVectors(filename, eigenvalues, vmfId) {
         $(div).on('click', addVectorToChart);
         iconsDiv.append(div);
 
+        //Иконка для отображения таблицы со значениями
         div = document.createElement('div');
         $(div).addClass('vector-icon');
         icon = document.createElement('i');
@@ -116,8 +185,8 @@ function createVMFVectors(filename, eigenvalues, vmfId) {
         div.append(icon);
         iconsDiv.append(div);
 
+        vectorDivs[i].append(iconsDiv);
 
-        vectorDivs[i].append(iconsDiv)
     }
 
     container.append(vectorDivs)
@@ -130,18 +199,29 @@ function addVectorToChart() {
     let val = $(this).attr('data-eigenvalue');
     let vmfId = $(this).attr('data-vmf-id');
     let vectorId = $(this).attr('data-vector-id');
+    let dependencyType = $('.datatype-area').attr('data-dependency-type');
+    console.log(dependencyType);
     $.ajax({
             url: '/get-2d-dependence',
             data: {
                 "vmf_id": vmfId,
                 "eigenvalue": val,
-                'vector_id': vectorId
+                'vector_id': vectorId,
+                'dependency_type': dependencyType
             },
             success: function (response) {
                 console.log(response);
                 let index = Number(vectorId) + 1;
                 let legend = 'Vector - ' + index + ', Value = ' + val;
-                vmDarkChart.appendSeries(response.points, legend)
+                if (charts[dependencyType]['initialized']) {
+                    charts[dependencyType]['chart'].appendSeries(response.points, legend);
+                } else {
+                    charts[dependencyType]['initialized'] = true;
+                    toggleVMChartVisible('#' + dependencyType);
+                    charts[dependencyType]['chart'].init();
+                    charts[dependencyType]['chart'].appendSeries(response.points, legend);
+                }
+                // vmDarkChart.appendSeries(response.points, legend)
 
             },
             error: function (error) {
@@ -153,7 +233,13 @@ function addVectorToChart() {
 
 //Открыть страницу со значениями вектора
 function displayVector() {
-    var win = window.open('/vector-view', '_blank');
+    let parent = $(this).parent();
+    let eigenvalue = $(parent).attr('data-eigenvalue');
+    let vmf_id = $(parent).attr('data-vmf-id');
+    let vector_id = $(parent).attr('data-vector-id');
+    let queryStr = `/vector-view?eigenvalue=${eigenvalue}&vmf_id=${vmf_id}&vector_id=${vector_id}`;
+
+    var win = window.open(queryStr, '_blank');
     win.focus();
 }
 
@@ -166,6 +252,7 @@ function saveVectorToDB() {
 function deleteVector() {
 
 }
+
 
 function displayUploadFileModal() {
     $('#modal-form_upload .modal-body p').text("Загрузить файл с векторами?");
@@ -194,3 +281,16 @@ function displayUploadFileModal() {
     });
 
 }
+
+function toggleVMChartVisible(chartID) {
+    $($($($(chartID).parent()).parent()).parent()).toggleClass('visible');
+
+}
+
+// function setCheckedType() {
+//
+//
+//     let vectorNode = this.parentNode.parentNode.parentNode.parentNode.parentNode;
+//     console.log(vectorNode);
+//     $(vectorNode).attr('data-dependency-type', $(this).attr('value'));
+// }

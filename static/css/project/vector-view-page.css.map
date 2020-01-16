@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":[],"names":[],"mappings":"","file":"vector-view-page.css"}
+{"version":3,"sourceRoot":"","sources":["vector-view-page.scss","components/datatable.scss","../base.variables.scss"],"names":[],"mappings":"AACQ;ACCR;EACE,kBCDW;EDEX;EACA,OCFe;EDGf;;;AAIF;EAEE;EACA;EACA,OCdU;;;ADmBZ;EACE;EACA;;;AASF;EACE;;;AAGF;EACE;EACA;;;ADjCF;EACE;EACA;;;AAIF;EACE;EACA,OERe","file":"vector-view-page.css"}

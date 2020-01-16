@@ -1,0 +1,38 @@
+@import "../../base.variables";
+
+.vm-table {
+  background-color: $base_black;
+  border: 1px solid $base_grey;
+  color: $base_font_color;
+  text-align: center;
+
+}
+
+.vm-table thead {
+
+  font-weight: bold;
+  font-size: 18px;
+  color: $base_blue;
+
+}
+
+
+.vm-table tbody {
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+//
+//.vm-table th {
+//  border: 1px solid $base_grey;
+//
+//}
+
+.vm-table td {
+  border: 1px solid $base_grey;
+}
+
+.vm-table thead th {
+  text-align: center;
+  border: 1px solid $base_grey;
+}

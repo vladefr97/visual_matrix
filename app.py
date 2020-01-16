@@ -102,7 +102,22 @@ def save_vector():
 
 @app.route('/vector-view')
 def vector_view():
-    return render_template('vector-view.html')
+    eigenvalue = float(request.values["eigenvalue"])
+    vmf_id = int(request.values["vmf_id"])
+    vector_id = int(request.values['vector_id'])
+
+    vmf_obj = vmf_list[vmf_id]
+    xs = vmf_obj.coordinates['x'].tolist()
+    ys = vmf_obj.coordinates['y'].tolist()
+    zs = vmf_obj.coordinates['z'].tolist()
+    uxs = vmf_obj.transformed_matrix[vector_id]['ux']
+    uys = vmf_obj.transformed_matrix[vector_id]['uy']
+    uzs = vmf_obj.transformed_matrix[vector_id]['uz']
+    phis = vmf_obj.transformed_matrix[vector_id]['phi']
+    table_values = create_table_values(x=xs, y=ys, z=zs, ux=uxs, uy=uys, uz=uzs, phi=phis)
+    filename = vmf_obj.filename
+    vector_info = f"Файл {filename}, Вектор - {vector_id + 1}, Собственное значение - {eigenvalue}"
+    return render_template('vector-view.html', table_values=table_values, vector_info=vector_info)
 
 
 @app.route('/get-2d-dependence')
@@ -110,9 +125,11 @@ def get_2d_dependence():
     vmf_id = int(request.values["vmf_id"])
     vector_id = int(request.values['vector_id'])
     eigenvalue = float(request.values["eigenvalue"])
+    dependencies = request.values['dependency_type'].split('-')
+
     vmf_obj = vmf_list[vmf_id]
-    arguments = vmf_obj.coordinates[0].tolist()
-    func_values = vmf_obj.transformed_matrix[vector_id]['ux']
+    arguments = vmf_obj.coordinates[dependencies[1]].tolist()
+    func_values = vmf_obj.transformed_matrix[vector_id][dependencies[0]]
     points = create_points(arguments=arguments, func_values=func_values)
     response = {'points': points}
     return response
@@ -125,10 +142,15 @@ def create_points(arguments, func_values):
     return points
 
 
-# @app.route('/get-eigenvalues', methods=['GET'])
-# def get_eigenvalues():
-#     values = parser.get_eigenvalues()
-#     print(str(values))
+def create_table_values(x, y, z, ux, uy, uz, phi):
+    length = len(x)
+    table_values = []
+    for i in range(0, length):
+        table_values.append({
+            'index': i,
+            'x': x[i], 'y': y[i], 'z': z[i], 'ux': ux[i], 'uy': uy[i], 'uz': uz[i], 'phi': phi[i]
+        })
+    return table_values
 
 
 @app.route('/read-file')

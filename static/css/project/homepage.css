@@ -1,8 +1,10 @@
 @import "../base/modal.css";
 @import "../base/vector.css";
+@import "../base/datatype-area.css";
 @import "../base/add.css";
 @import "../base/input-file.css";
 @import "../base/scrollbar.css";
+@import "../project/components/vm-chart.css";
 @import "/static/components/font-awesome/css/font-awesome.min.css";
 
 /*# sourceMappingURL=homepage.css.map */

@@ -24,7 +24,7 @@ db_handler = MySQLHandler(app=app, db_host=database['host'], db_name=database['n
 @app.route('/home')
 def home():
     if session.get('user'):
-        return render_template('home.html')
+        return render_template('home.html', user_login=session['login'])
     else:
         return render_template('outer-error.html', error="Неверный логин или пароль!")
 
@@ -118,7 +118,8 @@ def vector_view():
     table_values = create_table_values(x=xs, y=ys, z=zs, ux=uxs, uy=uys, uz=uzs, phi=phis)
     filename = vmf_obj.filename
     vector_info = f"Файл {filename}, Вектор - {vector_id + 1}, Собственное значение - {eigenvalue}"
-    return render_template('vector-view.html', table_values=table_values, vector_info=vector_info)
+    return render_template('vector-view.html', table_values=table_values, vector_info=vector_info,
+                           user_login=session['login'])
 
 
 @app.route('/get-2d-dependence')
@@ -156,7 +157,7 @@ def save_vector_to_db(json_vector: dict):
         'insert into eigenvalues (e_value, e_user_id) values (%s,%s)',
         (json_vector['eigenvalue'], session['user']))
 
-    status =  db_handler.execute_insert(
+    status = db_handler.execute_insert(
         'insert into eigenvectors(ev_eigenvalue_id, coordinates, filename, eigen_coordinates) values (%s,%s,%s,%s)',
         (insert_id, json_vector['coordinates'], json_vector['filename'], json_vector['eigencoordinates']))
     print(status)
@@ -186,7 +187,8 @@ def threed_view():
     vmf_id = int(request.values["vmf_id"])
     vector_id = int(request.values['vector_id'])
     eigenvalue = float(request.values["eigenvalue"])
-    return render_template('3d-view.html', vector_id=vector_id, vmf_id=vmf_id, eigenvalue=eigenvalue)
+    return render_template('3d-view.html', vector_id=vector_id, vmf_id=vmf_id, eigenvalue=eigenvalue,
+                           user_login=session['login'])
 
 
 @app.route('/get-3d-points')

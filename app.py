@@ -3,6 +3,7 @@ import json
 from flask import Flask, render_template, request, session, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from source.bin.vmf.objects import VMFVector
 from source.bin.vmf.parsers import VMFParser
 from source.conf import database, application
 from source.database.db_handler import MySQLHandler
@@ -83,7 +84,7 @@ def logout():
 
 
 @app.route('/upload-vector', methods=['POST'])
-def save_vector():
+def upload_vector():
     filename = request.values["filename"]
     data = request.values["filedata"]
     parser = VMFParser()
@@ -135,6 +136,32 @@ def get_2d_dependence():
     return response
 
 
+@app.route('/save-vector', methods=['POST'])
+def save_vector():
+    eigenvalue = float(request.values["eigenvalue"])
+    vmf_id = int(request.values["vmf_id"])
+    vector_id = int(request.values['vector_id'])
+    vmf_obj = vmf_list[vmf_id]
+
+    vmf_vector = VMFVector(filename=vmf_obj.filename, eigenvalue=eigenvalue, coordinates=vmf_obj.coordinates,
+                           eigencoordinates=vmf_obj.transformed_matrix[vector_id])
+
+    save_vector_to_db(vmf_vector.json_dict())
+
+    print(vmf_vector)
+
+
+def save_vector_to_db(json_vector: dict):
+    insert_id = db_handler.execute_insert(
+        'insert into eigenvalues (e_value, e_user_id) values (%s,%s)',
+        (json_vector['eigenvalue'], session['user']))
+
+    status =  db_handler.execute_insert(
+        'insert into eigenvectors(ev_eigenvalue_id, coordinates, filename, eigen_coordinates) values (%s,%s,%s,%s)',
+        (insert_id, json_vector['coordinates'], json_vector['filename'], json_vector['eigencoordinates']))
+    print(status)
+
+
 def create_points(arguments, func_values):
     points = []
     for x, y in zip(arguments, func_values):
@@ -151,6 +178,28 @@ def create_table_values(x, y, z, ux, uy, uz, phi):
             'x': x[i], 'y': y[i], 'z': z[i], 'ux': ux[i], 'uy': uy[i], 'uz': uz[i], 'phi': phi[i]
         })
     return table_values
+
+
+# TODO:добавать проверку аутентификации
+@app.route('/3d-view')
+def threed_view():
+    vmf_id = int(request.values["vmf_id"])
+    vector_id = int(request.values['vector_id'])
+    eigenvalue = float(request.values["eigenvalue"])
+    return render_template('3d-view.html', vector_id=vector_id, vmf_id=vmf_id, eigenvalue=eigenvalue)
+
+
+@app.route('/get-3d-points')
+def get_3d_points():
+    vmf_id = int(request.values["vmf_id"])
+    vector_id = int(request.values["vector_id"])
+    vmf_obj = vmf_list[vmf_id]
+    x = vmf_obj.transformed_matrix[vector_id]['ux']
+    y = vmf_obj.transformed_matrix[vector_id]['uy']
+    z = vmf_obj.transformed_matrix[vector_id]['uz']
+    response = {'x': x, 'y': y,
+                'z': z}
+    return response
 
 
 @app.route('/read-file')

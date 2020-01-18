@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 
 
@@ -27,3 +29,30 @@ class VMFObject:
             :rtype: str
         """
         pass
+
+
+class VMFVector:
+    # Имя файла с данными
+    filename: str
+    # Cобственное число
+    eigenvalue: float
+    # координаты векторв
+    coordinates: pd.DataFrame
+    # Значения собственного вектора
+    eigencoordinates: dict
+
+    def __init__(self, filename=None, eigenvalue=None, coordinates=None, eigencoordinates=None):
+        self.filename = filename
+        self.eigenvalue = eigenvalue
+        self.coordinates = coordinates
+        self.eigencoordinates = eigencoordinates
+
+    def json_dict(self):
+        coord = {'x': self.coordinates['x'].to_list(), 'y': self.coordinates['y'].to_list(),
+                 'z': self.coordinates['z'].to_list()}
+        coordinates = json.dumps(coord)
+        ecoordinates = json.dumps(self.eigencoordinates)
+        json_obj = {'filename': self.filename, 'eigenvalue': self.eigenvalue,
+                    'coordinates': coordinates, 'eigencoordinates': ecoordinates}
+        return json_obj
+

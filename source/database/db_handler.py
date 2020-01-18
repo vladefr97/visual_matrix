@@ -104,7 +104,7 @@ class MySQLHandler:
             cursor.close()
             conn.close()
 
-    def execute_insert(self, query: str, data: list) -> DBResponse:
+    def execute_insert(self, query: str, *data) -> DBResponse:
         """
 
         @param query: insert query string

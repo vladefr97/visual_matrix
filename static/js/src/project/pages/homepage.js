@@ -1,9 +1,6 @@
 import '../command.buttons'
 import {vmChart} from "../charts/vm-chart";
-import {rhChart} from "../charts/rh";
 
-// let vmDarkChart = new vmChart("UX(X)");
-// let rhDarkChart = new rhChart();
 
 var charts = {
     'ux-x': {
@@ -59,7 +56,6 @@ var charts = {
 $(document).ready(function () {
     //
     // vmDarkChart.init();
-
     toggleVMChartVisible('#ux-x');
     charts['ux-x']['initialized'] = true;
     charts['ux-x']['chart'].init();
@@ -108,7 +104,7 @@ $(document).ready(function () {
         };
 
 
-    })
+    });
 
     // let radiobtns = document.querySelector('.datatype-area p');
     let radiobtns = Array.from($('.type-option'));
@@ -162,6 +158,10 @@ function createVMFVectors(filename, eigenvalues, vmfId) {
         icon = document.createElement('i');
         $(icon).addClass('fa fa-save');
         div.append(icon);
+        $(div).attr('data-eigenvalue', eigenvalues[i]);
+        $(div).attr('data-vmf-id', vmfId);
+        $(div).attr('data-vector-id', i);
+        $(div).on('click', saveVectorToDB);
         iconsDiv.append(div);
 
         //Иконка для отображения вектора на графике
@@ -175,6 +175,20 @@ function createVMFVectors(filename, eigenvalues, vmfId) {
         $(div).attr('data-vector-id', i);
         $(div).on('click', addVectorToChart);
         iconsDiv.append(div);
+
+
+        //Иконка для отображения 3d графика
+        div = document.createElement('div');
+        $(div).addClass('vector-icon');
+        icon = document.createElement('i');
+        $(icon).addClass('fa fa-cube');
+        div.append(icon);
+        $(div).attr('data-eigenvalue', eigenvalues[i]);
+        $(div).attr('data-vmf-id', vmfId);
+        $(div).attr('data-vector-id', i);
+        $(div).on('click', open3DPage);
+        iconsDiv.append(div);
+
 
         //Иконка для отображения таблицы со значениями
         div = document.createElement('div');
@@ -243,8 +257,51 @@ function displayVector() {
     win.focus();
 }
 
+//Открыть страницу 3d графика
+function open3DPage() {
+
+    let eigenvalue = $(this).attr('data-eigenvalue');
+    let vmf_id = $(this).attr('data-vmf-id');
+    let vector_id = $(this).attr('data-vector-id');
+    let queryStr = `/3d-view?eigenvalue=${eigenvalue}&vmf_id=${vmf_id}&vector_id=${vector_id}`;
+
+    var win = window.open(queryStr, '_blank');
+    win.focus();
+
+}
+
 //Сохранить вектор в базу данных
 function saveVectorToDB() {
+    let eigenvalue = $(this).attr('data-eigenvalue');
+    let vmfId = $(this).attr('data-vmf-id');
+    let vectorId = $(this).attr('data-vector-id');
+    $.ajax({
+        url: '/save-vector',
+        data: {
+            "vmf_id": vmfId,
+            "eigenvalue": eigenvalue,
+            'vector_id': vectorId
+        },
+        method: 'POST',
+        success: function (response) {
+            // console.log(response);
+            // let index = Number(vectorId) + 1;
+            // let legend = 'Vector - ' + index + ', Value = ' + val;
+            // if (charts[dependencyType]['initialized']) {
+            //     charts[dependencyType]['chart'].appendSeries(response.points, legend);
+            // } else {
+            //     charts[dependencyType]['initialized'] = true;
+            //     toggleVMChartVisible('#' + dependencyType);
+            //     charts[dependencyType]['chart'].init();
+            //     charts[dependencyType]['chart'].appendSeries(response.points, legend);
+            // }
+            // vmDarkChart.appendSeries(response.points, legend)
+
+        },
+        error: function (error) {
+
+        }
+    })
 
 }
 
@@ -253,7 +310,6 @@ function deleteVector() {
 
 }
 
-
 function displayUploadFileModal() {
     $('#modal-form_upload .modal-body p').text("Загрузить файл с векторами?");
     $('#overlay_upload').fadeIn(400,
@@ -261,10 +317,7 @@ function displayUploadFileModal() {
             $('#modal-form_upload')
                 .css('display', 'block')
                 .animate({opacity: 1, top: '50%'}, 200);
-
         });
-
-    // $('#submit-btn_upload').on('click', deleteRequest);
 
 
     $('#modal-close_upload, #overlay_upload, #cancel-btn_upload').click(function () {
@@ -286,11 +339,3 @@ function toggleVMChartVisible(chartID) {
     $($($($(chartID).parent()).parent()).parent()).toggleClass('visible');
 
 }
-
-// function setCheckedType() {
-//
-//
-//     let vectorNode = this.parentNode.parentNode.parentNode.parentNode.parentNode;
-//     console.log(vectorNode);
-//     $(vectorNode).attr('data-dependency-type', $(this).attr('value'));
-// }

@@ -48,7 +48,7 @@
                         <div class="datatype-area">
                             <div class="row">
                                 <div class="col-xs-2">
-                                    <p class="type-option">
+                                    <p class="type-option first-option">
                                         <input id="r1" type="radio" value="ux-x" name="dependency-type">
                                         <label for="r1">UX(x)</label>
                                     </p>
@@ -256,16 +256,6 @@
 
 {#ApexCharts#}
 <script src="../static/js/dist/charts.js"></script>
-{#TODO: change this#}
-<script>
-    function setCheckedType() {
-        console.log(this);
-        console.log($(this).parentNode);
-        console.log($(this).parent());
-        let vectorNode = this.parentNode.parentNode.parentNode.parentNode.parentNode;
-        console.log(vectorNode);
-        $(vectorNode).attr('data-dependency-type', $(this).attr('value'));
-    }
-</script>
+
 </body>
 </html>

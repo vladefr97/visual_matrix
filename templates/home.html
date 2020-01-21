@@ -64,7 +64,7 @@
                                     </p>
                                     <p class="type-option">
                                         <input id="r4" type="radio" value="phi-x" name="dependency-type">
-                                        <label for="r4">  Phi(x)</label>
+                                        <label for="r4"> Phi(x)</label>
 
                                     </p></div>
                                 <div class="col-xs-2">
@@ -91,7 +91,7 @@
                                 <div class="col-xs-2">
                                     <p class="type-option">
                                         <input id="r9" type="radio" value="ux-z" name="dependency-type">
-                                        <label for="r9">  UX(z)</label>
+                                        <label for="r9"> UX(z)</label>
 
                                     </p>
                                     <p class="type-option">
@@ -101,7 +101,7 @@
                                     </p>
                                     <p class="type-option">
                                         <input id="r11" type="radio" value="uz-z" name="dependency-type">
-                                        <label for="r11">  Uz(z)</label>
+                                        <label for="r11"> Uz(z)</label>
 
                                     </p>
                                     <p class="type-option">
@@ -115,6 +115,44 @@
                             </div>
                         </div>
                         <div id="vectors-container">
+                            {% if vectors !=None %}
+                                {% for vector in vectors %}
+                                    <div class="vector">
+                                        <div class="vector-text">{{ vector.text }}</div>
+                                        <div class="vector-icons" data-eigenvalue="{{ vector.eigenvalue }}"
+                                             data-vmf-id="{{ vector.vmf_id }}" data-vector-id="{{ vector.id }}"
+                                             data-vector-type="0">
+                                            <div class="vector-icon delete-icon"><i class="fa fa-times"></i></div>
+                                            <div class="vector-icon save-icon"><i
+                                                    class="fa fa-save"></i></div>
+                                            <div class="vector-icon chart-icon"><i
+                                                    class="fa fa-line-chart"></i></div>
+                                            <div class="vector-icon volume-icon"><i
+                                                    class="fa fa-cube"></i></div>
+                                            <div class="vector-icon display-icon"><i class="fa fa-eye"></i></div>
+                                        </div>
+                                    </div>
+
+                                {% endfor %}
+                            {% endif %}
+                            {% if db_vectors!=None %}
+                                {% for db_vector in db_vectors %}
+                                    <div class="vector db-vector">
+                                        <div class="vector-text">{{ db_vector.text }}</div>
+                                        <div class="vector-icons" data-eigenvalue="{{ db_vector.eigenvalue }}"
+                                             data-vector-id="{{ db_vector.id }}" data-vector-type="1">
+                                            <div class="vector-icon delete-icon"><i class="fa fa-times"></i></div>
+
+                                            <div class="vector-icon chart-icon">
+                                                <i class="fa fa-line-chart"> </i>
+                                            </div>
+                                            <div class="vector-icon volume-icon"><i class="fa fa-cube"></i></div>
+                                            <div class="vector-icon display-icon"><i class="fa fa-eye"></i></div>
+                                        </div>
+                                    </div>
+
+                                {% endfor %}
+                            {% endif %}
 
 
                         </div>
@@ -251,6 +289,7 @@
 
 </div>
 {% include 'modal-upload-data.html' %}
+{% include 'modal-save-vector.html' %}
 <!--    Bundle-->
 <script src="../static/js/dist/bundle.js"></script>
 

@@ -15,6 +15,10 @@
   position: relative;
 }
 
+.vector.db-vector {
+  background: rgba(24, 210, 25, 0.68);
+}
+
 .vector-icon {
   display: inline-block;
   margin: 5px;

@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./static/js/src/project/pages/3d-view-page.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./static/js/src/project/pages/my-vectors-page.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -97,14 +97,14 @@ eval("var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!\n * jQ
 
 /***/ }),
 
-/***/ "./static/js/src/project/pages/3d-view-page.js":
-/*!*****************************************************!*\
-  !*** ./static/js/src/project/pages/3d-view-page.js ***!
-  \*****************************************************/
+/***/ "./static/js/src/project/pages/my-vectors-page.js":
+/*!********************************************************!*\
+  !*** ./static/js/src/project/pages/my-vectors-page.js ***!
+  \********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("/* WEBPACK VAR INJECTION */(function($) {$(document).ready(function () {\n  let container3d = $('#view3d');\n  let vmfId = $(container3d).attr('data-vmf-id');\n  let vectorId = $(container3d).attr('data-vector-id');\n  let vectorType = $(container3d).attr('data-vector-type');\n  $.ajax({\n    url: '/get-3d-points',\n    data: {\n      \"vmf_id\": vmfId,\n      'vector_id': vectorId,\n      'vector_type': vectorType\n    },\n    type: 'GET',\n    success: function (response) {\n      let x = response.x;\n      let y = response.y;\n      let z = response.z;\n      let ux = response.ux;\n      Plotly.d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv', function (err, rows) {\n        function unpack(rows, key) {\n          return rows.map(function (row) {\n            return row[key];\n          });\n        } // var z_data = [[2,3,4,5],\n        //     [0,4,1,65],\n        //     [9,3,-15,],\n        //     [10,4,40,5],\n        //     [2,2,-4,4],\n        //     [9,3,9,1],\n        //     [1,3,0,2],\n        //     [4,4,4,4],\n        //   ]\n        // for (i = 0; i < 24; i++) {\n        //     z_data.push(unpack(rows, i));\n        // }\n\n\n        var data = [{\n          type: \"mesh3d\",\n          x: x,\n          y: y,\n          z: z,\n          // i: [0, 0, 0, 1],\n          // j: [1, 2, 3, 2],\n          // k: [2, 3, 1, 3],\n          intensity: ux,\n          colorscale: [[0, 'rgb(255, 0, 0)'], [0.5, 'rgb(0, 255, 0)'], [1, 'rgb(0, 0, 255)']]\n        }];\n        var layout = {\n          title: 'Mt Bruno Elevation',\n          autosize: false,\n          width: 500,\n          height: 500,\n          margin: {\n            l: 65,\n            r: 50,\n            b: 65,\n            t: 90\n          }\n        };\n        Plotly.newPlot('view3d', data, layout);\n      });\n    },\n    error: function (error) {\n      console.log(error);\n    }\n  });\n});\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ \"./node_modules/jquery/dist/jquery.js\")))\n\n//# sourceURL=webpack:///./static/js/src/project/pages/3d-view-page.js?");
+eval("/* WEBPACK VAR INJECTION */(function($) {$(document).ready(function () {\n  setPageEvents();\n});\n\nfunction setPageEvents() {\n  let addIcons = Array.from($('.add-icon'));\n  $.each(addIcons, function (index, value) {\n    $(value).on('click', addToBuffer);\n  });\n}\n\nfunction addToBuffer() {\n  let vector_id = $(this).parent().attr('data-vector-id');\n  $.ajax({\n    url: '/buffer-add-vector',\n    data: {\n      \"vector_id\": vector_id\n    },\n    // method: 'POST',\n    success: function (response) {},\n    error: function (error) {\n      alert('Произошла ошибка!');\n    }\n  });\n  displayModal();\n}\n\nfunction displayModal() {\n  $('#modal-form_save .modal-body p').text(\"Вектор добавлен на главную страницу\");\n  $('#overlay_save').fadeIn(400, function () {\n    $('#modal-form_save').css('display', 'block').animate({\n      opacity: 1,\n      top: '50%'\n    }, 200);\n  });\n  $('#modal-close_save, #overlay_save, #cancel-btn_save').click(function () {\n    $('#submit-btn_save').off('click');\n    $('#modal-form_save').animate({\n      opacity: 0,\n      top: '45%'\n    }, 200, function () {\n      $(this).css('display', 'none');\n      $('#overlay_save').fadeOut(400);\n    });\n  });\n  $('#submit-btn_save').on('click', function () {\n    $('#modal-form_save').animate({\n      opacity: 0,\n      top: '45%'\n    }, 200, function () {\n      $(this).css('display', 'none');\n      $('#overlay_save').fadeOut(400);\n    });\n  });\n}\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ \"./node_modules/jquery/dist/jquery.js\")))\n\n//# sourceURL=webpack:///./static/js/src/project/pages/my-vectors-page.js?");
 
 /***/ })
 

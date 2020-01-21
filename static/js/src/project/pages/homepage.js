@@ -59,7 +59,12 @@ $(document).ready(function () {
     toggleVMChartVisible('#ux-x');
     charts['ux-x']['initialized'] = true;
     charts['ux-x']['chart'].init();
+    setPageEvents()
 
+
+});
+
+function setPageEvents() {
 
     $('#btn-upload').on('click', function () {
         displayUploadFileModal();
@@ -117,7 +122,33 @@ $(document).ready(function () {
 
     })
 
-});
+    let deleteIcons = Array.from($('.delete-icon'));
+    $.each(deleteIcons, function (index, value) {
+        $(value).on('click', deleteVector)
+    })
+
+    let saveIcons = Array.from($('.save-icon'));
+    $.each(saveIcons, function (index, value) {
+        $(value).on('click', saveVectorToDB)
+    })
+
+    let chartIcons = Array.from($('.chart-icon'))
+    $.each(chartIcons, function (index, value) {
+        $(value).on('click', addVectorToChart)
+    })
+
+    let icons3D = Array.from($('.volume-icon'))
+    $.each(icons3D, function (index, value) {
+        $(value).on('click', open3DPage)
+    })
+
+    let displayIcons = Array.from($('.display-icon'))
+    $.each(displayIcons, function (index, value) {
+        $(value).on('click', displayVector)
+    })
+
+
+}
 
 function createVMFVectors(filename, eigenvalues, vmfId) {
 
@@ -141,6 +172,7 @@ function createVMFVectors(filename, eigenvalues, vmfId) {
         $(iconsDiv).attr('data-eigenvalue', eigenvalues[i]);
         $(iconsDiv).attr('data-vmf-id', vmfId);
         $(iconsDiv).attr('data-vector-id', i);
+        $(iconsDiv).attr('data-vector-type', 0);
 
         //Иконка для удаления вектора
         let div = document.createElement('div');
@@ -158,9 +190,6 @@ function createVMFVectors(filename, eigenvalues, vmfId) {
         icon = document.createElement('i');
         $(icon).addClass('fa fa-save');
         div.append(icon);
-        $(div).attr('data-eigenvalue', eigenvalues[i]);
-        $(div).attr('data-vmf-id', vmfId);
-        $(div).attr('data-vector-id', i);
         $(div).on('click', saveVectorToDB);
         iconsDiv.append(div);
 
@@ -170,9 +199,6 @@ function createVMFVectors(filename, eigenvalues, vmfId) {
         icon = document.createElement('i');
         $(icon).addClass('fa fa-line-chart');
         div.append(icon);
-        $(div).attr('data-eigenvalue', eigenvalues[i]);
-        $(div).attr('data-vmf-id', vmfId);
-        $(div).attr('data-vector-id', i);
         $(div).on('click', addVectorToChart);
         iconsDiv.append(div);
 
@@ -183,9 +209,6 @@ function createVMFVectors(filename, eigenvalues, vmfId) {
         icon = document.createElement('i');
         $(icon).addClass('fa fa-cube');
         div.append(icon);
-        $(div).attr('data-eigenvalue', eigenvalues[i]);
-        $(div).attr('data-vmf-id', vmfId);
-        $(div).attr('data-vector-id', i);
         $(div).on('click', open3DPage);
         iconsDiv.append(div);
 
@@ -210,10 +233,18 @@ function createVMFVectors(filename, eigenvalues, vmfId) {
 
 //Нарисовать 2D график зависимости собственного вектора
 function addVectorToChart() {
-    let val = $(this).attr('data-eigenvalue');
-    let vmfId = $(this).attr('data-vmf-id');
-    let vectorId = $(this).attr('data-vector-id');
+    let parent = $(this).parent();
+    let val = $(parent).attr('data-eigenvalue');
+
+    let vectorId = $(parent).attr('data-vector-id');
     let dependencyType = $('.datatype-area').attr('data-dependency-type');
+    let vectorType = $(parent).attr('data-vector-type');
+    let vmfId;
+    //0 - Vector from file
+    //1 - Vector from DB
+    if (vectorType === "0")
+        vmfId = $(parent).attr('data-vmf-id');
+    else vmfId = "666";
     console.log(dependencyType);
     $.ajax({
             url: '/get-2d-dependence',
@@ -221,6 +252,7 @@ function addVectorToChart() {
                 "vmf_id": vmfId,
                 "eigenvalue": val,
                 'vector_id': vectorId,
+                'vector_type': vectorType,
                 'dependency_type': dependencyType
             },
             success: function (response) {
@@ -249,9 +281,16 @@ function addVectorToChart() {
 function displayVector() {
     let parent = $(this).parent();
     let eigenvalue = $(parent).attr('data-eigenvalue');
-    let vmf_id = $(parent).attr('data-vmf-id');
     let vector_id = $(parent).attr('data-vector-id');
-    let queryStr = `/vector-view?eigenvalue=${eigenvalue}&vmf_id=${vmf_id}&vector_id=${vector_id}`;
+    let vector_type = $(parent).attr('data-vector-type');
+    let vmf_id;
+    //0 - Vector from file
+    //1 - Vector from DB
+    if (vector_type === "0")
+        vmf_id = $(parent).attr('data-vmf-id');
+    else vmf_id = "666";
+
+    let queryStr = `/vector-view?eigenvalue=${eigenvalue}&vmf_id=${vmf_id}&vector_id=${vector_id}&vector_type=${vector_type}`;
 
     var win = window.open(queryStr, '_blank');
     win.focus();
@@ -259,11 +298,18 @@ function displayVector() {
 
 //Открыть страницу 3d графика
 function open3DPage() {
+    let parent = $(this).parent();
+    let eigenvalue = $(parent).attr('data-eigenvalue');
 
-    let eigenvalue = $(this).attr('data-eigenvalue');
-    let vmf_id = $(this).attr('data-vmf-id');
-    let vector_id = $(this).attr('data-vector-id');
-    let queryStr = `/3d-view?eigenvalue=${eigenvalue}&vmf_id=${vmf_id}&vector_id=${vector_id}`;
+    let vector_id = $(parent).attr('data-vector-id');
+    let vector_type = $(parent).attr('data-vector-type');
+    let vmf_id;
+    //0 - Vector from file
+    //1 - Vector from DB
+    if (vector_type === "0")
+        vmf_id = $(parent).attr('data-vmf-id');
+    else vmf_id = "666";
+    let queryStr = `/3d-view?eigenvalue=${eigenvalue}&vmf_id=${vmf_id}&vector_id=${vector_id}&vector_type=${vector_type}`;
 
     var win = window.open(queryStr, '_blank');
     win.focus();
@@ -272,9 +318,10 @@ function open3DPage() {
 
 //Сохранить вектор в базу данных
 function saveVectorToDB() {
-    let eigenvalue = $(this).attr('data-eigenvalue');
-    let vmfId = $(this).attr('data-vmf-id');
-    let vectorId = $(this).attr('data-vector-id');
+    let parent = $(this).parent();
+    let eigenvalue = $(parent).attr('data-eigenvalue');
+    let vmfId = $(parent).attr('data-vmf-id');
+    let vectorId = $(parent).attr('data-vector-id');
     $.ajax({
         url: '/save-vector',
         data: {
@@ -284,24 +331,16 @@ function saveVectorToDB() {
         },
         method: 'POST',
         success: function (response) {
-            // console.log(response);
-            // let index = Number(vectorId) + 1;
-            // let legend = 'Vector - ' + index + ', Value = ' + val;
-            // if (charts[dependencyType]['initialized']) {
-            //     charts[dependencyType]['chart'].appendSeries(response.points, legend);
-            // } else {
-            //     charts[dependencyType]['initialized'] = true;
-            //     toggleVMChartVisible('#' + dependencyType);
-            //     charts[dependencyType]['chart'].init();
-            //     charts[dependencyType]['chart'].appendSeries(response.points, legend);
-            // }
-            // vmDarkChart.appendSeries(response.points, legend)
+
 
         },
         error: function (error) {
+            alert('Не удалось сохранить вектор!')
 
         }
     })
+    displaySaveVectorModal(eigenvalue, vmfId, vectorId);
+
 
 }
 
@@ -334,6 +373,46 @@ function displayUploadFileModal() {
     });
 
 }
+
+function displaySaveVectorModal() {
+    $('#modal-form_save .modal-body p').text("Вектор сохранен в базу данных!");
+    $('#overlay_save').fadeIn(400,
+        function () {
+            $('#modal-form_save')
+                .css('display', 'block')
+                .animate({opacity: 1, top: '50%'}, 200);
+        });
+
+
+    $('#modal-close_save, #overlay_save, #cancel-btn_save').click(function () {
+        $('#submit-btn_save').off('click');
+
+        $('#modal-form_save')
+            .animate({opacity: 0, top: '45%'}, 200,
+                function () {
+                    $(this).css('display', 'none');
+                    $('#overlay_save').fadeOut(400);
+                }
+            );
+
+
+    });
+
+    $('#submit-btn_save').on('click', function () {
+
+        $('#modal-form_save')
+            .animate({opacity: 0, top: '45%'}, 200,
+                function () {
+                    $(this).css('display', 'none');
+                    $('#overlay_save').fadeOut(400);
+                }
+            );
+
+
+    });
+
+}
+
 
 function toggleVMChartVisible(chartID) {
     $($($($(chartID).parent()).parent()).parent()).toggleClass('visible');

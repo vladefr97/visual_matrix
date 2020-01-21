@@ -31,7 +31,8 @@ module.exports = {
         bundle: './static/js/src/project/pages/homepage.js',
         charts: './static/js/src/project/charts.js',
         vectorView: './static/js/src/project/pages/vector-view-page.js',
-        view3D:'./static/js/src/project/pages/3d-view-page.js'
+        view3D: './static/js/src/project/pages/3d-view-page.js',
+        myVectors: './static/js/src/project/pages/my-vectors-page.js'
 
     },
 

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Просмотр значений</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="/static/components/bootstrap/dist/css/bootstrap.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/static/components/font-awesome/css/font-awesome.min.css">
+    <!--AdminLTE styles-->
+    <link rel="stylesheet" href="/static/components/adminlte/css/AdminLTE.css">
+    {#    Visual Matrix skin for AdminLTE#}
+    <link rel="stylesheet" href="/static/components/adminlte/css/vm-skins.css">
+
+
+    <!--Google fonts-->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+
+    <!-- jQuery 3 -->
+    <script src="/static/components/jquery/dist/jquery.min.js"></script>
+    <!--AdminLTE project-->
+    <script src="../static/components/adminlte/js/adminlte.js"></script>
+    <link rel="stylesheet" href="../static/css/project/my-vectors-page.css">
+    <script src="../static/js/dist/myVectors.js"></script>
+
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+
+    {% include 'main-header.html' %}
+    {% include 'main-sidebar.html' %}
+    <div class="content-wrapper">
+        <section class="content-header">
+
+        </section>
+        <section class="content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <div id="vectors-container">
+                            {% for vector in vectors %}
+                                <div class="vector db-vector">
+                                    <div class="vector-text">
+                                        {{ vector.text }}
+
+                                    </div>
+                                    <div class="vector-icons" data-eigenvalue="{{ vector.eigenvalue }}"
+                                         data-vector-id="{{ vector.id }}" data-vector-source="db">
+                                        <div class="vector-icon delete-icon">
+                                            <i class="fa fa-times"></i>
+                                        </div>
+                                        <div class="vector-icon">
+                                            <i class="fa fa-cube"></i>
+                                        </div>
+                                        <div class="vector-icon add-icon">
+                                            <i class="fa fa-plus"></i>
+                                        </div>
+                                        <div class="vector-icon">
+                                            <i class="fa fa-eye"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            {% endfor %}
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-9"></div>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+    </div>
+
+</div>
+{% include 'modal-save-vector.html' %}
+{#<!--    Bundle-->#}
+{#<script src="../static/js/dist/bundle.js"></script>#}
+</body>
+</html>

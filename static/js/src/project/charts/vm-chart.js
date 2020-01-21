@@ -33,7 +33,7 @@ window.Apex = {
 
     yaxis: {
         decimalsInFloat: 2,
-        opposite: true,
+        opposite: false,
         labels: {
             offsetX: -10
         }
@@ -47,7 +47,8 @@ var vmChart = function (chartName, chartID) {
 
             height: 350,
             type: 'line',
-            stacked: true,
+            //Очень важный параметр, если установлен в true, то почему-то данные отображаются неправильно!!!!
+            stacked: false,
             animations: {
                 enabled: false
             },
@@ -72,12 +73,13 @@ var vmChart = function (chartName, chartID) {
                     customIcons: []
                 },
                 autoSelected: 'zoom'
-            }, stroke: {
-                show: true,
+            },
+            stroke: {
+                show: false,
                 curve: 'smooth',
                 lineCap: 'butt',
                 colors: undefined,
-                width: 2,
+                // width: 2,
                 dashArray: 0,
             },
             zoom: {
@@ -95,11 +97,11 @@ var vmChart = function (chartName, chartID) {
         dataLabels: {
             enabled: false
         },
-        stroke: {
-            curve: 'straight',
-            color: '#0D47A1',
-            width: 1,
-        },
+        // stroke: {
+        //     curve: 'straight',
+        //     color: '#0D47A1',
+        //     width: 1,
+        // },
         grid: {
             show: true,
         },

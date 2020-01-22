@@ -20,15 +20,16 @@
     {#    Charts styles#}
 
     <link rel="stylesheet" href="../static/css/charts.css">
+    {#    Page styles#}
+    <link rel="stylesheet" href="/static/css/project/view-3d.css">
 
-    {#    Homepage window styles#}
-    <link rel="stylesheet" href="../static/css/project/homepage.css">
     <!-- jQuery 3 -->
     <script src="/static/components/jquery/dist/jquery.min.js"></script>
     <!--AdminLTE project-->
     <script src="../static/components/adminlte/js/adminlte.js"></script>
     <!-- Load plotly.js into the DOM -->
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+
 
 </head>
 <body class="hold-transition skin-blue sidebar-mini" id="carousel">
@@ -46,13 +47,56 @@
             <div class="container-fluid">
 
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-2 pull-left">
+                        <div class="datatype-area">
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <p class="type-option first-option">
+                                        <input id="r1" type="radio" value="ux" name="dependency-type">
+                                        <label for="r1">UX(x,y,z)</label>
+                                    </p>
+                                </div>
+                                <div class="col-xs-2">
+                                    <p class="type-option first-option">
+                                        <input id="r1" type="radio" value="uy" name="dependency-type">
+                                        <label for="r1">UY(x,y,z)</label>
+                                    </p>
+                                </div>
+
+                                <div class="col-xs-2">
+                                    <p class="type-option first-option">
+                                        <input id="r1" type="radio" value="uz" name="dependency-type">
+                                        <label for="r1">UZ(x,y,z)</label>
+                                    </p>
+                                </div>
+                                <div class="col-xs-2">
+                                    <p class="type-option first-option">
+                                        <input id="r1" type="radio" value="phi" name="dependency-type">
+                                        <label for="r1">Phi(x,y,z)</label>
+                                    </p>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <div class="btn btn-primary" id="get-points_btn">Построить график</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {#                    <div class="col-12">#}
+                    {#                        <div id='view3d-surface'><!-- Plotly chart will be drawn inside this DIV --></div>#}
+                    {#                    </div>#}
+                </div>
+                <div class="row">
+                    <div class="col-10">
                         <div id='view3d' data-vector-id="{{ vector_id }}" data-vmf-id="{{ vmf_id }}"
                              data-eigen-value="{{ eigen_value }}" data-vector-type="{{ vector_type }}">
                             <!-- Plotly chart will be drawn inside this DIV --></div>
-                    </div>
-                    <div class="col-12">
-                        <div id='view3d-surface'><!-- Plotly chart will be drawn inside this DIV --></div>
                     </div>
                 </div>
 

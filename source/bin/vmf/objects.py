@@ -41,11 +41,15 @@ class VMFVector:
     # Значения собственного вектора
     eigencoordinates: dict
 
-    def __init__(self, filename=None, eigenvalue=None, coordinates=None, eigencoordinates=None):
+    def __init__(self, filename=None, eigenvalue=None, coordinates=None, eigencoordinates=None, name=None):
         self.filename = filename
         self.eigenvalue = eigenvalue
         self.coordinates = coordinates
         self.eigencoordinates = eigencoordinates
+        if name == "" or name == None:
+            name = f'Vector with Value = {self.eigenvalue}'
+        else:
+            self.name = name
 
     def json_dict(self):
         coord = {'x': self.coordinates['x'].to_list(), 'y': self.coordinates['y'].to_list(),
@@ -53,6 +57,5 @@ class VMFVector:
         coordinates = json.dumps(coord)
         ecoordinates = json.dumps(self.eigencoordinates)
         json_obj = {'filename': self.filename, 'eigenvalue': self.eigenvalue,
-                    'coordinates': coordinates, 'eigencoordinates': ecoordinates}
+                    'coordinates': coordinates, 'eigencoordinates': ecoordinates, 'name': self.name}
         return json_obj
-

@@ -120,7 +120,7 @@ function setPageEvents() {
             $(datatypeArea).attr('data-dependency-type', dependencyType);
         })
 
-    })
+    });
 
     let deleteIcons = Array.from($('.delete-icon'));
     $.each(deleteIcons, function (index, value) {
@@ -322,23 +322,7 @@ function saveVectorToDB() {
     let eigenvalue = $(parent).attr('data-eigenvalue');
     let vmfId = $(parent).attr('data-vmf-id');
     let vectorId = $(parent).attr('data-vector-id');
-    $.ajax({
-        url: '/save-vector',
-        data: {
-            "vmf_id": vmfId,
-            "eigenvalue": eigenvalue,
-            'vector_id': vectorId
-        },
-        method: 'POST',
-        success: function (response) {
 
-
-        },
-        error: function (error) {
-            alert('Не удалось сохранить вектор!')
-
-        }
-    })
     displaySaveVectorModal(eigenvalue, vmfId, vectorId);
 
 
@@ -346,6 +330,15 @@ function saveVectorToDB() {
 
 //Удалить вектор
 function deleteVector() {
+    let parent = $(this).parent();
+    let eigenvalue = $(parent).attr('data-eigenvalue');
+    let vmfId = $(parent).attr('data-vmf-id');
+    let vectorId = $(parent).attr('data-vector-id');
+    let vector_type = $(parent).attr('data-vector-type');
+    let div = $(parent).parent()
+    $(div).fadeOut(400, function () {
+        $(this).remove()
+    })
 
 }
 
@@ -374,8 +367,8 @@ function displayUploadFileModal() {
 
 }
 
-function displaySaveVectorModal() {
-    $('#modal-form_save .modal-body p').text("Вектор сохранен в базу данных!");
+function displaySaveVectorModal(eigenvalue, vmfId, vectorId) {
+    $('#modal-form_save .modal-body p').text("Введите название вектора");
     $('#overlay_save').fadeIn(400,
         function () {
             $('#modal-form_save')
@@ -399,6 +392,31 @@ function displaySaveVectorModal() {
     });
 
     $('#submit-btn_save').on('click', function () {
+
+        let vectorName = $('#vector-name_save').val();
+        console.log(vectorName);
+        if (vectorName !== '') {
+            $.ajax({
+                url: '/save-vector',
+                data: {
+                    "vmf_id": vmfId,
+                    "eigenvalue": eigenvalue,
+                    'vector_id': vectorId,
+                    'vector_name': vectorName
+                },
+                method: 'POST',
+                success: function (response) {
+
+
+                },
+                error: function (error) {
+                    alert('Не удалось сохранить вектор!')
+
+                }
+            })
+
+        } else alert('Введите название вектора')
+
 
         $('#modal-form_save')
             .animate({opacity: 0, top: '45%'}, 200,

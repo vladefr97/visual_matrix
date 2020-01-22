@@ -189,10 +189,11 @@ def save_vector():
     eigenvalue = float(request.values["eigenvalue"])
     vmf_id = int(request.values["vmf_id"])
     vector_id = int(request.values['vector_id'])
+    vector_name = request.values['vector_name']
     vmf_obj = vmf_list[vmf_id]
 
     vmf_vector = VMFVector(filename=vmf_obj.filename, eigenvalue=eigenvalue, coordinates=vmf_obj.coordinates,
-                           eigencoordinates=vmf_obj.transformed_matrix[vector_id])
+                           eigencoordinates=vmf_obj.transformed_matrix[vector_id], name=vector_name)
     status = save_vector_to_db(vmf_vector.json_dict())
     response = {'status': status}
 
@@ -218,16 +219,43 @@ def buffer_add_vector():
     return {'status': 'ok'}
 
 
+@app.route('/buffer-delete-vector')
+def buffer_delete_vector():
+    vector_id = int(request.values['vector_id'])
+    vmf_id = int(request.values['vmf_id'])
+    vector_type = int(request.values['vector_type'])
+
+    if vector_type == 0:
+        delete_file_vector_from_buffer(vmf_id, vector_id)
+    else:
+        delete_db_vector_from_buffer(vector_id)
+
+    return {'status': 'ok'}
+
+
+def delete_db_vector_from_buffer(vector_id):
+    pass
+
+
+def delete_file_vector_from_buffer(vmf_id, vector_id):
+    vmf_obj = vmf_list[vmf_id]
+
+
+def get_vmf_vector_index(vmf_vector):
+    pass
+
+
 def select_vector_by_id(user_id, vector_id):
     eigenvalue = db_handler.execute_select(
         f'select * from eigenvalues where e_user_id = {user_id} and e_id={vector_id}').data[0]
 
     db_vector = db_handler.execute_select(f'select * from eigenvectors where ev_eigenvalue_id = {eigenvalue[0]}').data
-    text = f'Value = {eigenvalue[1]}, filename - {db_vector[0][3]}'
+    text = f'{db_vector[0][5]}, Value = {eigenvalue[1]}'
     vmf_vector = {'id': eigenvalue[0], 'eigenvalue': eigenvalue[1], 'text': text, 'vector': {
         'coordinates': json.loads(db_vector[0][2]),
         'filename': db_vector[0][3],
-        'eigencoordinates': json.loads(db_vector[0][4])
+        'eigencoordinates': json.loads(db_vector[0][4]),
+        'name': db_vector[0][5]
     }}
     return vmf_vector
 
@@ -237,11 +265,12 @@ def select_all_vectors(user_id):
     vectors = []
     for eigenvalue in eigenvalues:
         vector = db_handler.execute_select(f'select * from eigenvectors where ev_eigenvalue_id = {eigenvalue[0]}').data
-        text = f'Value = {eigenvalue[1]}, filename - {vector[0][3]}'
+        text = f'{vector[0][5]}, Value = {eigenvalue[1]}'
         vectors.append({'id': eigenvalue[0], 'eigenvalue': eigenvalue[1], 'text': text, 'vector': {
             'coordinates': json.loads(vector[0][2]),
             'filename': vector[0][3],
-            'eigencoordinates': json.loads(vector[0][4])
+            'eigencoordinates': json.loads(vector[0][4]),
+            'name': vector[0][5]
         }})
     return vectors
 
@@ -253,8 +282,9 @@ def save_vector_to_db(json_vector: dict):
     insert_id = answer.data['lastid']
 
     db_response = db_handler.execute_insert(
-        'insert into eigenvectors(ev_eigenvalue_id, coordinates, filename, eigen_coordinates) values (%s,%s,%s,%s)',
-        (insert_id, json_vector['coordinates'], json_vector['filename'], json_vector['eigencoordinates']))
+        'insert into eigenvectors(ev_eigenvalue_id, coordinates, filename, eigen_coordinates,ev_name) values (%s,%s,%s,%s,%s)',
+        (insert_id, json_vector['coordinates'], json_vector['filename'], json_vector['eigencoordinates'],
+         json_vector['name']))
 
     return db_response.status
 
@@ -294,23 +324,24 @@ def get_3d_points():
     vmf_id = int(request.values["vmf_id"])
     vector_id = int(request.values["vector_id"])
     vector_type = int(request.values['vector_type'])
+    dependency_type = request.values['dependency_type']
     calculator = VectorCalculator()
     if vector_type == 0:
         vmf_obj = vmf_list[vmf_id]
         x = vmf_obj.transformed_matrix[vector_id]['ux']
         y = vmf_obj.transformed_matrix[vector_id]['uy']
         z = vmf_obj.transformed_matrix[vector_id]['uz']
-        ux = vmf_obj.transformed_matrix[vector_id]['ux']
+        func = vmf_obj.transformed_matrix[vector_id][dependency_type]
 
     else:
         db_vector = find_vector_by_id(vector_id)
         x = db_vector['vector']['eigencoordinates']['ux']
         y = db_vector['vector']['eigencoordinates']['uy']
         z = db_vector['vector']['eigencoordinates']['uz']
-        ux = db_vector['vector']['eigencoordinates']['ux']
-    ux = calculator.normalize_vector(ux)
+        func = db_vector['vector']['eigencoordinates'][dependency_type]
+    func = calculator.normalize_vector(func)
     response = {'x': x, 'y': y,
-                'z': z,'ux':ux}
+                'z': z, 'func': func}
     return response
 
 

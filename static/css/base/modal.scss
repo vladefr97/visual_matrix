@@ -1,5 +1,5 @@
 $modal_width: 400px;
-#modal-form_upload,#modal-form_save {
+#modal-form_upload,#modal-form_save,#modal-form_info {
 
   border-radius: 5px;
   border: 3px #000 solid;
@@ -17,7 +17,7 @@ $modal_width: 400px;
 }
 
 /* Пoдлoжкa */
-#overlay_upload,#overlay_save {
+#overlay_upload,#overlay_save, #overlay_info {
   z-index: 3;
   position: fixed;
   background-color: rgb(0, 0, 0, 0.4);

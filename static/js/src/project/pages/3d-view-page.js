@@ -70,7 +70,7 @@ $(document).ready(function () {
                     }];
 
                     var layout = {
-                        title: 'Трехмерное отображение',
+                        title: '3D View ',
                         autosize: false,
                         width: 800,
                         height: 800,

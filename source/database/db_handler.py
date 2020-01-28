@@ -149,3 +149,17 @@ class MySQLHandler:
         finally:
             cursor.close()
             conn.close()
+
+    def execute_delete(self, query: str, *data):
+        try:
+            conn = self._mysql.connect()
+            cursor = conn.cursor()
+            cursor.executemany(query, data)
+            conn.commit()
+            return DBResponse(True, "")
+        except Exception as e:
+            message = str(e)
+            return DBResponse(False, message)
+        finally:
+            cursor.close()
+            conn.close()

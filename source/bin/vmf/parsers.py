@@ -12,6 +12,7 @@ class VMFParser:
     coordinates: pd.DataFrame
     transformed_matrix = []
     eigendict = {}
+    vector_names = []
 
     def __init__(self) -> None:
         # Number of eigenvalues and corresponding eigenvectors
@@ -43,12 +44,13 @@ class VMFParser:
             self.coordinates.columns = ['x', 'y', 'z']
             for i in range(0, self.eigenN):
                 self.eigenvalues.append(float(vmf_data[coord_num + 1 + i]))
+                self.vector_names.append(f'Vector - {i + 1}')
                 self.eigenvectors.append(
                     np.asfarray(np.array(vmf_data[coord_num + self.eigenN + 1 + i].split()), float))
                 self.eigendict[self.eigenvalues[i]] = self.eigenvectors[i]
             self.generate_transformed_matrix()
             return VMFObject(filename=filename, eigenvalues=self.eigenvalues, coordinates=self.coordinates,
-                             eigendict=self.eigendict, transformed_matrix=self.transformed_matrix)
+                             eigendict=self.eigendict, transformed_matrix=self.transformed_matrix,vector_names=self.vector_names)
         except Exception as e:
             print('Возникла ошибка: ' + str(e))
 

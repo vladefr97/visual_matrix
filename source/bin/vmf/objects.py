@@ -14,14 +14,16 @@ class VMFObject:
     eigendict: dict
     # Массив в каждой ячейке которого хранится словарь вида {'x':[vector],'y':[vector],'z':[vector],'phi':[vector]}
     transformed_matrix: list
+    vector_names:list
 
-    def __init__(self, filename=None, eigenvalues=None, coordinates=None, eigendict=None,
+    def __init__(self, filename=None, eigenvalues=None, coordinates=None, eigendict=None,vector_names=None,
                  transformed_matrix=None) -> None:
         self.filename = filename
         self.eigenvalues = eigenvalues
         self.coordinates = coordinates
         self.eigendict = eigendict
         self.transformed_matrix = transformed_matrix
+        self.vector_names = vector_names
 
     def to_json(self):
         """

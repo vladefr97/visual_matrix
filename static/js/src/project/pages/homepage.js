@@ -125,7 +125,7 @@ function setPageEvents() {
     let deleteIcons = Array.from($('.delete-icon'));
     $.each(deleteIcons, function (index, value) {
         $(value).on('click', deleteVector)
-    })
+    });
 
     let saveIcons = Array.from($('.save-icon'));
     $.each(saveIcons, function (index, value) {
@@ -181,6 +181,7 @@ function createVMFVectors(filename, eigenvalues, vmfId) {
         let icon = document.createElement('i');
         $(icon).addClass('fa fa-times');
         div.append(icon);
+        $(div).on('click', deleteVector);
         iconsDiv.append(div);
 
 
@@ -244,7 +245,7 @@ function addVectorToChart() {
     //1 - Vector from DB
     if (vectorType === "0")
         vmfId = $(parent).attr('data-vmf-id');
-    else vmfId = "666";
+    else vmfId = "99999";
     console.log(dependencyType);
     $.ajax({
             url: '/get-2d-dependence',
@@ -288,7 +289,7 @@ function displayVector() {
     //1 - Vector from DB
     if (vector_type === "0")
         vmf_id = $(parent).attr('data-vmf-id');
-    else vmf_id = "666";
+    else vmf_id = "99999";
 
     let queryStr = `/vector-view?eigenvalue=${eigenvalue}&vmf_id=${vmf_id}&vector_id=${vector_id}&vector_type=${vector_type}`;
 
@@ -308,7 +309,7 @@ function open3DPage() {
     //1 - Vector from DB
     if (vector_type === "0")
         vmf_id = $(parent).attr('data-vmf-id');
-    else vmf_id = "666";
+    else vmf_id = "99999";
     let queryStr = `/3d-view?eigenvalue=${eigenvalue}&vmf_id=${vmf_id}&vector_id=${vector_id}&vector_type=${vector_type}`;
 
     var win = window.open(queryStr, '_blank');
@@ -332,13 +333,36 @@ function saveVectorToDB() {
 function deleteVector() {
     let parent = $(this).parent();
     let eigenvalue = $(parent).attr('data-eigenvalue');
-    let vmfId = $(parent).attr('data-vmf-id');
+
     let vectorId = $(parent).attr('data-vector-id');
-    let vector_type = $(parent).attr('data-vector-type');
-    let div = $(parent).parent()
-    $(div).fadeOut(400, function () {
-        $(this).remove()
+    let vectorType = $(parent).attr('data-vector-type');
+    let vmfId;
+    if (vectorType === "0")
+        vmfId = $(parent).attr('data-vmf-id');
+    else vmfId = "99999";
+
+    let div = $(parent).parent();
+    $.ajax({
+        url: '/buffer-delete-vector',
+        data: {
+            eigenvalue: eigenvalue,
+            vmf_id: vmfId,
+            vector_id: vectorId,
+            vector_type: vectorType
+
+        },
+        success: function (response) {
+            $(div).fadeOut(400, function () {
+                $(this).remove()
+            })
+
+        },
+        error: function (error) {
+            alert('Не удалось удалить вектор: ' + error)
+
+        }
     })
+
 
 }
 

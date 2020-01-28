@@ -13,15 +13,14 @@ from source.database.db_handler import MySQLHandler
 
 app = Flask(__name__)
 app.secret_key = application['secret-key']
-# # Instance for vmf files parsing
-# parser = VMFParser()
+# Object for communication with MYSQL Database
+db_handler = MySQLHandler(app=app, db_host=database['host'], db_name=database['name'], db_user=database['user'],
+                          db_password=database['password'])
+
 # List of VMF files
 vmf_list = []
 # List of db vectors in buffer
 db_vectors = []
-# Object for communication with MYSQL Database
-db_handler = MySQLHandler(app=app, db_host=database['host'], db_name=database['name'], db_user=database['user'],
-                          db_password=database['password'])
 
 
 @app.route('/home')
@@ -32,7 +31,7 @@ def home():
             for i in range(0, len(vmf_list)):
                 for j in range(0, len(vmf_list[i].eigenvalues)):
                     vectors.append({
-                        'text': f'Vector - {j + 1} ({vmf_list[i].filename}),Value = {vmf_list[i].eigenvalues[j]}',
+                        'text': f'{vmf_list[i].vector_names[j]} ({vmf_list[i].filename}),Value = {vmf_list[i].eigenvalues[j]}',
                         'eigenvalue': vmf_list[i].eigenvalues[j],
                         'id': j,
                         'vmf_id': i
@@ -175,15 +174,6 @@ def get_2d_dependence():
     return response
 
 
-def find_vector_by_id(vector_id):
-    db_vector: dict
-    for elem in db_vectors:
-        if elem['id'] == vector_id:
-            db_vector = elem
-            break
-    return db_vector
-
-
 @app.route('/save-vector', methods=['POST'])
 def save_vector():
     eigenvalue = float(request.values["eigenvalue"])
@@ -222,27 +212,72 @@ def buffer_add_vector():
 @app.route('/buffer-delete-vector')
 def buffer_delete_vector():
     vector_id = int(request.values['vector_id'])
+    eigenvalue = float(request.values['eigenvalue'])
     vmf_id = int(request.values['vmf_id'])
     vector_type = int(request.values['vector_type'])
 
     if vector_type == 0:
-        delete_file_vector_from_buffer(vmf_id, vector_id)
+        delete_file_vector_from_buffer(vmf_id, eigenvalue)
     else:
         delete_db_vector_from_buffer(vector_id)
 
     return {'status': 'ok'}
 
 
-def delete_db_vector_from_buffer(vector_id):
+@app.route('/delete-vector-from-db')
+def delete_vector_from_db():
+    vector_id = int(request.values['vector_id'])
+    response = db_handler.execute_delete(f'delete from eigenvalues where e_id=%s', vector_id)
+    print(response)
+    return {'status': 'ok'}
     pass
 
 
-def delete_file_vector_from_buffer(vmf_id, vector_id):
-    vmf_obj = vmf_list[vmf_id]
+# TODO:добавать проверку аутентификации
+@app.route('/3d-view')
+def threed_view():
+    vmf_id = int(request.values["vmf_id"])
+    vector_id = int(request.values['vector_id'])
+    eigenvalue = float(request.values["eigenvalue"])
+    vector_type = int(request.values['vector_type'])
+    return render_template('3d-view.html', vector_id=vector_id, vmf_id=vmf_id, eigenvalue=eigenvalue,
+                           vector_type=vector_type,
+                           user_login=session['login'])
 
 
-def get_vmf_vector_index(vmf_vector):
-    pass
+@app.route('/get-3d-points')
+def get_3d_points():
+    vmf_id = int(request.values["vmf_id"])
+    vector_id = int(request.values["vector_id"])
+    vector_type = int(request.values['vector_type'])
+    dependency_type = request.values['dependency_type']
+    calculator = VectorCalculator()
+    if vector_type == 0:
+        vmf_obj = vmf_list[vmf_id]
+        x = vmf_obj.transformed_matrix[vector_id]['ux']
+        y = vmf_obj.transformed_matrix[vector_id]['uy']
+        z = vmf_obj.transformed_matrix[vector_id]['uz']
+        func = vmf_obj.transformed_matrix[vector_id][dependency_type]
+
+    else:
+        db_vector = find_vector_by_id(vector_id)
+        x = db_vector['vector']['eigencoordinates']['ux']
+        y = db_vector['vector']['eigencoordinates']['uy']
+        z = db_vector['vector']['eigencoordinates']['uz']
+        func = db_vector['vector']['eigencoordinates'][dependency_type]
+    func = calculator.normalize_vector(func)
+    response = {'x': x, 'y': y,
+                'z': z, 'func': func}
+    return response
+
+
+def find_vector_by_id(vector_id):
+    db_vector: dict
+    for elem in db_vectors:
+        if elem['id'] == vector_id:
+            db_vector = elem
+            break
+    return db_vector
 
 
 def select_vector_by_id(user_id, vector_id):
@@ -307,52 +342,24 @@ def create_table_values(x, y, z, ux, uy, uz, phi):
     return table_values
 
 
-# TODO:добавать проверку аутентификации
-@app.route('/3d-view')
-def threed_view():
-    vmf_id = int(request.values["vmf_id"])
-    vector_id = int(request.values['vector_id'])
-    eigenvalue = float(request.values["eigenvalue"])
-    vector_type = int(request.values['vector_type'])
-    return render_template('3d-view.html', vector_id=vector_id, vmf_id=vmf_id, eigenvalue=eigenvalue,
-                           vector_type=vector_type,
-                           user_login=session['login'])
+def delete_db_vector_from_buffer(vector_id):
+    for i in range(0, len(db_vectors)):
+        if db_vectors[i]['id'] == vector_id:
+            del db_vectors[i]
+            break
 
 
-@app.route('/get-3d-points')
-def get_3d_points():
-    vmf_id = int(request.values["vmf_id"])
-    vector_id = int(request.values["vector_id"])
-    vector_type = int(request.values['vector_type'])
-    dependency_type = request.values['dependency_type']
-    calculator = VectorCalculator()
-    if vector_type == 0:
-        vmf_obj = vmf_list[vmf_id]
-        x = vmf_obj.transformed_matrix[vector_id]['ux']
-        y = vmf_obj.transformed_matrix[vector_id]['uy']
-        z = vmf_obj.transformed_matrix[vector_id]['uz']
-        func = vmf_obj.transformed_matrix[vector_id][dependency_type]
-
-    else:
-        db_vector = find_vector_by_id(vector_id)
-        x = db_vector['vector']['eigencoordinates']['ux']
-        y = db_vector['vector']['eigencoordinates']['uy']
-        z = db_vector['vector']['eigencoordinates']['uz']
-        func = db_vector['vector']['eigencoordinates'][dependency_type]
-    func = calculator.normalize_vector(func)
-    response = {'x': x, 'y': y,
-                'z': z, 'func': func}
-    return response
-
-
-@app.route('/read-file')
-def read_file():
-    # with open('./resources/test.json') as json_file:
-    #     data = json.load(json_file)
-    # return json.dumps({'data': data})
-
-    # file = fd.askopenfilename()
-    pass
+def delete_file_vector_from_buffer(vmf_id, eigenvalue):
+    keys = list(vmf_list[vmf_id].eigendict.keys())
+    index = 0
+    for i in range(0, len(keys)):
+        if eigenvalue == keys[i]:
+            index = i
+            break
+    del vmf_list[vmf_id].eigendict[eigenvalue]
+    del vmf_list[vmf_id].eigenvalues[index]
+    del vmf_list[vmf_id].vector_names[index]
+    del vmf_list[vmf_id].transformed_matrix[index]
 
 
 if __name__ == '__main__':

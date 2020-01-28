@@ -7,12 +7,17 @@ function setPageEvents() {
     $.each(addIcons, function (index, value) {
         $(value).on('click', addToBuffer)
     })
+
+    let deleteIcons = Array.from($('.delete-icon'));
+    $.each(deleteIcons, function (index, value) {
+        $(value).on('click', deleteVectorFromDB)
+    })
 }
 
 
 function addToBuffer() {
 
-    let vector_id = ($(this).parent()).attr('data-vector-id');
+    let vector_id = $(this).parent().attr('data-vector-id');
     $.ajax({
         url: '/buffer-add-vector',
         data: {
@@ -32,6 +37,30 @@ function addToBuffer() {
 
 
 }
+
+function deleteVectorFromDB() {
+    let parent = $(this).parent();
+    let vectorID = $(parent).attr('data-vector-id');
+    let div = $(parent).parent();
+    $.ajax({
+        url: '/delete-vector-from-db',
+        data: {
+            vector_id: vectorID
+        },
+        success: function (response) {
+            $(div).fadeOut(400, function () {
+                $(this).remove()
+            })
+
+        },
+        error: function (error) {
+            alert(error)
+
+        }
+    })
+
+}
+
 function displayModal() {
     $('#modal-form_info .modal-body p').text("Вектор добавлен на главную страницу");
     $('#overlay_info').fadeIn(400,

@@ -93,6 +93,12 @@ function setPageEvents() {
                                 $('#overlay_upload').fadeOut(400);
                             }
                         );
+                    if (response === "Inner Error") {
+                        console.log(response);
+                        displayErrorModal("Неверный формат входного файла!");
+                        return;
+                    }
+
                     let vmfObject = response.vmf_object;
                     console.log(vmfObject.filename)
                     console.log(vmfObject.eigenvalues)
@@ -102,6 +108,7 @@ function setPageEvents() {
 
                 },
                 error: function (error) {
+                    // console.error("someerror")
                     console.log(error)
                 }
             });
@@ -391,6 +398,33 @@ function displayUploadFileModal() {
 
 }
 
+function displayErrorModal(message) {
+
+    $('#modal-form_error .modal-body p').text(message);
+    $('#overlay_error').fadeIn(400,
+        function () {
+            $('#modal-form_error')
+                .css('display', 'block')
+                .animate({opacity: 1, top: '50%'}, 200);
+        });
+
+
+    $('#modal-close_error, #overlay_error, #submit-btn_error').click(function () {
+        $('#submit-btn_error').off('click');
+
+        $('#modal-form_error')
+            .animate({opacity: 0, top: '45%'}, 200,
+                function () {
+                    $(this).css('display', 'none');
+                    $('#overlay_error').fadeOut(400);
+                }
+            );
+
+    });
+
+
+}
+
 function displaySaveVectorModal(eigenvalue, vmfId, vectorId) {
     $('#modal-form_save .modal-body p').text("Введите название вектора");
     $('#overlay_save').fadeIn(400,
@@ -430,6 +464,9 @@ function displaySaveVectorModal(eigenvalue, vmfId, vectorId) {
                 },
                 method: 'POST',
                 success: function (response) {
+                    if(response==="Inner Error"){
+                        displayErrorModal("Длина названия вектора не должна превышать 500 символов!")
+                    }
 
 
                 },

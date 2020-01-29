@@ -1,5 +1,5 @@
 @charset "UTF-8";
-#modal-form_upload, #modal-form_save, #modal-form_info {
+#modal-form_upload, #modal-form_save, #modal-form_info, #modal-form_error {
   border-radius: 5px;
   border: 3px #000 solid;
   background: #fff;
@@ -16,7 +16,7 @@
 }
 
 /* Пoдлoжкa */
-#overlay_upload, #overlay_save, #overlay_info {
+#overlay_upload, #overlay_save, #overlay_info, #overlay_error {
   z-index: 3;
   position: fixed;
   background-color: rgba(0, 0, 0, 0.4);
@@ -29,6 +29,11 @@
   left: 0;
   cursor: pointer;
   display: none;
+}
+
+#modal-form_error .modal-header {
+  background-color: red;
+  color: white;
 }
 
 /*# sourceMappingURL=modal.css.map */

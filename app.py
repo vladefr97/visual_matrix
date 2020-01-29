@@ -61,8 +61,10 @@ def signup():
     _name = request.form['inputName']
     _email = request.form['inputEmail']
     _password = request.form['inputPassword']
+    if _name == '' or _password == '' or _email == '':
+        return render_template('outer-error.html', error="Нельзя вводить пустые значения данных регистрации!")
 
-    # validate the received values
+        # validate the received values
     if _name and _email and _password:
         _hashed_password = generate_password_hash(_password)
         db_answer = db_handler.call_create_delete_proc('registerUser', _name, _email, _hashed_password)
@@ -105,6 +107,8 @@ def upload_vector():
     parser = VMFParser()
 
     vmf_object = parser.parse_vmf_text(data, filename)
+    if vmf_object is None:
+        return "Inner Error"
     vmf_list.append(vmf_object)
     print(len(vmf_list))
     response = {'vmf_object': {
@@ -180,6 +184,8 @@ def save_vector():
     vmf_id = int(request.values["vmf_id"])
     vector_id = int(request.values['vector_id'])
     vector_name = request.values['vector_name']
+    if len(vector_name) > 500:
+        return "Inner Error"
     vmf_obj = vmf_list[vmf_id]
 
     vmf_vector = VMFVector(filename=vmf_obj.filename, eigenvalue=eigenvalue, coordinates=vmf_obj.coordinates,

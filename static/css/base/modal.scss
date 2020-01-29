@@ -1,5 +1,5 @@
 $modal_width: 400px;
-#modal-form_upload,#modal-form_save,#modal-form_info {
+#modal-form_upload,#modal-form_save,#modal-form_info ,#modal-form_error{
 
   border-radius: 5px;
   border: 3px #000 solid;
@@ -17,7 +17,7 @@ $modal_width: 400px;
 }
 
 /* Пoдлoжкa */
-#overlay_upload,#overlay_save, #overlay_info {
+#overlay_upload,#overlay_save, #overlay_info,#overlay_error {
   z-index: 3;
   position: fixed;
   background-color: rgb(0, 0, 0, 0.4);
@@ -30,4 +30,9 @@ $modal_width: 400px;
   left: 0;
   cursor: pointer;
   display: none;
+}
+
+#modal-form_error .modal-header{
+  background-color: red;
+  color: white;
 }

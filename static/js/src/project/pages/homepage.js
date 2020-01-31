@@ -97,6 +97,10 @@ function setPageEvents() {
                         console.log(response);
                         displayErrorModal("Неверный формат входного файла!");
                         return;
+                    } else if (response === "Not Unique") {
+                        displayErrorModal("Файл содержит одинаковые значения узлов декартовых координат!");
+                        return;
+
                     }
 
                     let vmfObject = response.vmf_object;
@@ -464,7 +468,7 @@ function displaySaveVectorModal(eigenvalue, vmfId, vectorId) {
                 },
                 method: 'POST',
                 success: function (response) {
-                    if(response==="Inner Error"){
+                    if (response === "Inner Error") {
                         displayErrorModal("Длина названия вектора не должна превышать 500 символов!")
                     }
 

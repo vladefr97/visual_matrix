@@ -107,8 +107,16 @@ def upload_vector():
     parser = VMFParser()
 
     vmf_object = parser.parse_vmf_text(data, filename)
+
     if vmf_object is None:
         return "Inner Error"
+    x = vmf_object.coordinates['x'].tolist()
+    y = vmf_object.coordinates['y'].tolist()
+    z = vmf_object.coordinates['z'].tolist()
+    n = len(x)
+    unique = check_unique_values(x, y, z, n)
+    if not unique:
+        return "Not Unique"
     vmf_list.append(vmf_object)
     print(len(vmf_list))
     response = {'vmf_object': {
@@ -118,6 +126,14 @@ def upload_vector():
 
     }}
     return response
+
+
+def check_unique_values(x, y, z, n):
+    array = []
+    for i in range(0, len(x)):
+        array.append(str(x[i]) + str(y[i]) + str(z[i]))
+    check_set = set(array)
+    return len(check_set) == n
 
 
 @app.route('/vector-view')

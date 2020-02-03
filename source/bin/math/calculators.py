@@ -6,6 +6,11 @@ class VectorCalculator:
         super().__init__()
 
     def normalize_vector(self, vector: list):
+        """
+        Метод для нормализации вектора по норме Евклида
+        :param vector:
+        :return:
+        """
         norm = 0
         for elem in vector:
             norm = norm + elem ** 2

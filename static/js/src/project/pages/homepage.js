@@ -72,12 +72,28 @@ function setPageEvents() {
     });
     const input = document.querySelector('input[type="file"]');
     input.addEventListener('change', function (e) {
+        let start = new Date().getTime() / 1000;
         console.log(input.files);
+        console.log("start: " + start);
+
         const reader = new FileReader();
         reader.readAsText(input.files[0]);
+        reader.onprogress = (event) => {
+            if (event.lengthComputable) {
+                let progress = ((event.loaded / event.total) * 100);
+                console.log('Прогресс:' + progress);
+            }
+        };
+        reader.onerror = (event) => {
+            cosole.log(event)
+        }
 
         reader.onload = function () {
 
+            let upload_time = new Date().getTime() / 1000;
+            let timeToUpload = upload_time - start;
+            console.log("Time to Upload: " + upload_time);
+            let data = reader.result
             $.ajax({
                 url: '/upload-vector',
                 data: {
@@ -93,6 +109,11 @@ function setPageEvents() {
                                 $('#overlay_upload').fadeOut(400);
                             }
                         );
+                    var end = new Date().getTime() / 1000;
+                    let time = end - start;
+
+                    console.log("end: " + end);
+                    console.log("time: " + time);
                     if (response === "Inner Error") {
                         console.log(response);
                         displayErrorModal("Неверный формат входного файла!");
@@ -369,11 +390,10 @@ function deleteVector() {
 
         },
         error: function (error) {
-            alert('Не удалось удалить вектор: ' + error)
+            // alert('Не удалось удалить вектор: ' + error)
 
         }
     })
-
 
 }
 

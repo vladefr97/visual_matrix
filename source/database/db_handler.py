@@ -49,9 +49,13 @@ class MySQLHandler:
             cursor.callproc(proc_name, proc_args)
             data = cursor.fetchall()
             return DBResponse(True, data)
+        except UnboundLocalError as e:
+            message = str(e)
+            return DBResponse(False, message)
         except Exception as e:
             message = str(e)
             return DBResponse(False, message)
+
         finally:
             cursor.close()
             conn.close()

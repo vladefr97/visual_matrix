@@ -1,4 +1,5 @@
 import json
+import time
 
 from flask import Flask, render_template, request, session, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,6 +9,11 @@ from source.bin.vmf.objects import VMFVector
 from source.bin.vmf.parsers import VMFParser
 from source.conf import database, application
 from source.database.db_handler import MySQLHandler
+from PySide2 import QtWidgets
+from PySide2 import QtGui
+from PySide2 import QtCore
+from main import MyFileBrowser
+import os
 
 # from tkinter import filedialog as fd
 
@@ -80,7 +86,11 @@ def signup():
 def validate_login():
     _username = request.form['inputLogin']
     _password = request.form['inputPassword']
-    data = db_handler.call_get_data_proc('getUserByLogin', _username).data
+    try:
+        data = db_handler.call_get_data_proc('getUserByLogin', _username).data
+    except UnboundLocalError as e:
+        return render_template('outer-error.html', error='Нет подключения к базе данных!')
+
     # validate user data
     if len(data) > 0:
         _user_password = str(data[0][3])
@@ -102,12 +112,20 @@ def logout():
 
 @app.route('/upload-vector', methods=['POST'])
 def upload_vector():
+    # qtapp = QtWidgets.QApplication([])
+    # fb = MyFileBrowser()
+    # fb.show()
+    # qtapp.exec_()
+
     filename = request.values["filename"]
     data = request.values["filedata"]
+    print('Got Data!')
+    print(f"data size = {len(data)}")
     parser = VMFParser()
-
+    start_time = time.time()
+    print('Starting parsing...')
     vmf_object = parser.parse_vmf_text(data, filename)
-
+    middle_time = time.time()
     if vmf_object is None:
         return "Inner Error"
     x = vmf_object.coordinates['x'].tolist()
@@ -117,8 +135,14 @@ def upload_vector():
     unique = check_unique_values(x, y, z, n)
     if not unique:
         return "Not Unique"
+    end_time = time.time()
     vmf_list.append(vmf_object)
     print(len(vmf_list))
+    print(f'strat: {start_time}')
+    print(f'middle: {middle_time}')
+    print(f'end: {end_time}')
+    print(f'upload time {end_time-start_time}')
+    print(f'checking unique time {end_time-middle_time}')
     response = {'vmf_object': {
         'filename': vmf_object.filename,
         'vmf_id': len(vmf_list) - 1,

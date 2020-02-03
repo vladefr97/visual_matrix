@@ -54,6 +54,10 @@ class VMFVector:
             self.name = name
 
     def json_dict(self):
+        """
+        Преобразовать объект в строку формата JSON
+        :return:
+        """
         coord = {'x': self.coordinates['x'].to_list(), 'y': self.coordinates['y'].to_list(),
                  'z': self.coordinates['z'].to_list()}
         coordinates = json.dumps(coord)
